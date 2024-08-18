@@ -23,7 +23,7 @@
     <meta name="description" content="摘要开源的密码管理工具，我们搭建的是私有服务器，可以在手机下载对应应用以及在浏览器下载对应插件对私有服务器进行链接 搭建docker-compose 搭建注意看环境配置，一般DOMAIN、ADMIN_TOKEN和SIGNUPS_ALLOWED需要修改，建议在第一次部署的时候设置SIGNUPS_ALLOWED为true，创建账户后设置为false 12345678910111213141516171">
 <meta property="og:type" content="article">
 <meta property="og:title" content="（五）多种方法搭建私有bitwardn服务器   bitwarden &amp; Vaultwarden">
-<meta property="og:url" content="http://localhost:4000/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html">
+<meta property="og:url" content="https://www.huzhihao.top/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html">
 <meta property="og:site_name" content="Mr. Hu">
 <meta property="og:description" content="摘要开源的密码管理工具，我们搭建的是私有服务器，可以在手机下载对应应用以及在浏览器下载对应插件对私有服务器进行链接 搭建docker-compose 搭建注意看环境配置，一般DOMAIN、ADMIN_TOKEN和SIGNUPS_ALLOWED需要修改，建议在第一次部署的时候设置SIGNUPS_ALLOWED为true，创建账户后设置为false 12345678910111213141516171">
 <meta property="og:locale" content="zh_CN">
@@ -31,13 +31,13 @@
 <meta property="article:modified_time" content="2024-08-18T10:16:20.000Z">
 <meta property="article:author" content="Huzhihao">
 <meta property="article:tag" content="工作流">
-<meta property="article:tag" content="轻量云服务器">
 <meta property="article:tag" content="密码管理">
+<meta property="article:tag" content="轻量云服务器">
 <meta name="twitter:card" content="summary">
   
   
   
-  <meta name="keywords" content="工作流,轻量云服务器,密码管理">
+  <meta name="keywords" content="工作流,密码管理,轻量云服务器">
 
   <!-- feed -->
   
@@ -124,12 +124,12 @@
     <section id="share">
       <div class="header"><span>分享文章</span></div>
       <div class="body">
-        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="http://localhost:4000/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html" /></div>
-        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=http://localhost:4000/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html&title=（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden - Mr. Hu&summary=摘要开源的密码管理工具，我们搭建的是私有服务器，可以在手机下载对应应用以及在浏览器下载对应插件对私有服务器进行链接
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://www.huzhihao.top/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://www.huzhihao.top/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html&title=（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden - Mr. Hu&summary=摘要开源的密码管理工具，我们搭建的是私有服务器，可以在手机下载对应应用以及在浏览器下载对应插件对私有服务器进行链接
 搭建docker-compose 搭建注意看环境配置，一般DOMAIN、ADMIN_TOKEN和SIGNUPS_ALL..."><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/80c07e4dbb303.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
         
         <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
-          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=http://localhost:4000/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html"/>
+          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://www.huzhihao.top/%EF%BC%88%E4%BA%94%EF%BC%89%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89bitwardn%E6%9C%8D%E5%8A%A1%E5%99%A8%20%20%20bitwarden%20&%20Vaultwarden.html"/>
         </div>
         
       </div>
@@ -143,7 +143,7 @@
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\（三）Nginx 反向代理速成教学与泛域名证书的申请.html" title="（三）Nginx 反向代理速成教学与泛域名证书的申请"><span class="title">（三）Nginx 反向代理速成教学与泛域名证书的申请</span></a><a class="item" href="\（二）基于syncthing+oss+云服务器的文件同步与数据备份教程.html" title="（二）基于syncthing+oss+云服务器的文件同步与数据备份教程"><span class="title">（二）基于syncthing+oss+云服务器的文件同步与数据备份教程</span></a><a class="item" href="\（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流.html" title="（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流"><span class="title">（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流</span></a><a class="item" href="\（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法.html" title="（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法"><span class="title">（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法</span></a><a class="item" href="\（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览.html" title="（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览"><span class="title">（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览</span></a></div></section></div>
+    <div class="related-posts"><a class="item" href="\（二）基于syncthing+oss+云服务器的文件同步与数据备份教程.html" title="（二）基于syncthing+oss+云服务器的文件同步与数据备份教程"><span class="title">（二）基于syncthing+oss+云服务器的文件同步与数据备份教程</span></a><a class="item" href="\（三）Nginx 反向代理速成教学与泛域名证书的申请.html" title="（三）Nginx 反向代理速成教学与泛域名证书的申请"><span class="title">（三）Nginx 反向代理速成教学与泛域名证书的申请</span></a><a class="item" href="\（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流.html" title="（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流"><span class="title">（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流</span></a><a class="item" href="\（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法.html" title="（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法"><span class="title">（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法</span></a><a class="item" href="\（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览.html" title="（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览"><span class="title">（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览</span></a></div></section></div>
 
 
   <div class="related-wrap md-text" id="comments">

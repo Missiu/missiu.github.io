@@ -23,7 +23,7 @@
     <meta name="description" content="摘要本指南介绍了三种 Nginx 安装方法：直接安装、从源码编译安装及 Docker 安装。直接安装最为简便，适合大多数情况；从源码编译安装提供更高灵活性；Docker 安装则便于容器化部署。此外，还介绍了如何配置 Nginx 实现反向代理和 HTTPS 加密访问，例如将所有 sync.exp.com 的请求转发到 http:&#x2F;&#x2F;127.0.0.1:8384。 安装直接安装(建议)sudo apt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="（三）Nginx 反向代理速成教学与泛域名证书的申请">
-<meta property="og:url" content="http://localhost:4000/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html">
+<meta property="og:url" content="https://www.huzhihao.top/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html">
 <meta property="og:site_name" content="Mr. Hu">
 <meta property="og:description" content="摘要本指南介绍了三种 Nginx 安装方法：直接安装、从源码编译安装及 Docker 安装。直接安装最为简便，适合大多数情况；从源码编译安装提供更高灵活性；Docker 安装则便于容器化部署。此外，还介绍了如何配置 Nginx 实现反向代理和 HTTPS 加密访问，例如将所有 sync.exp.com 的请求转发到 http:&#x2F;&#x2F;127.0.0.1:8384。 安装直接安装(建议)sudo apt">
 <meta property="og:locale" content="zh_CN">
@@ -31,14 +31,14 @@
 <meta property="article:modified_time" content="2024-08-14T08:13:42.000Z">
 <meta property="article:author" content="Huzhihao">
 <meta property="article:tag" content="工作流">
-<meta property="article:tag" content="nginx">
 <meta property="article:tag" content="反向代理">
 <meta property="article:tag" content="轻量云服务器">
+<meta property="article:tag" content="nginx">
 <meta name="twitter:card" content="summary">
   
   
   
-  <meta name="keywords" content="工作流,nginx,反向代理,轻量云服务器">
+  <meta name="keywords" content="工作流,反向代理,轻量云服务器,nginx">
 
   <!-- feed -->
   
@@ -133,11 +133,11 @@
     <section id="share">
       <div class="header"><span>分享文章</span></div>
       <div class="body">
-        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="http://localhost:4000/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html" /></div>
-        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=http://localhost:4000/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html&title=（三）Nginx 反向代理速成教学与泛域名证书的申请 - Mr. Hu&summary=摘要本指南介绍了三种 Nginx 安装方法：直接安装、从源码编译安装及 Docker 安装。直接安装最为简便，适合大多数情况；从源码编译安装提供更高灵活性；Docker 安装则便于容器化部署。此外，还介绍了如何配置 Nginx 实现反..."><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/80c07e4dbb303.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://www.huzhihao.top/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://www.huzhihao.top/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html&title=（三）Nginx 反向代理速成教学与泛域名证书的申请 - Mr. Hu&summary=摘要本指南介绍了三种 Nginx 安装方法：直接安装、从源码编译安装及 Docker 安装。直接安装最为简便，适合大多数情况；从源码编译安装提供更高灵活性；Docker 安装则便于容器化部署。此外，还介绍了如何配置 Nginx 实现反..."><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/80c07e4dbb303.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
         
         <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
-          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=http://localhost:4000/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html"/>
+          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://www.huzhihao.top/%EF%BC%88%E4%B8%89%EF%BC%89Nginx%20%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E9%80%9F%E6%88%90%E6%95%99%E5%AD%A6%E4%B8%8E%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7.html"/>
         </div>
         
       </div>
@@ -151,7 +151,7 @@
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流.html" title="（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流"><span class="title">（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流</span></a><a class="item" href="\（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览.html" title="（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览"><span class="title">（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览</span></a><a class="item" href="\（二）基于syncthing+oss+云服务器的文件同步与数据备份教程.html" title="（二）基于syncthing+oss+云服务器的文件同步与数据备份教程"><span class="title">（二）基于syncthing+oss+云服务器的文件同步与数据备份教程</span></a><a class="item" href="\（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden.html" title="（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden"><span class="title">（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden</span></a><a class="item" href="\（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法.html" title="（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法"><span class="title">（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法</span></a></div></section></div>
+    <div class="related-posts"><a class="item" href="\（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流.html" title="（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流"><span class="title">（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流</span></a><a class="item" href="\（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览.html" title="（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览"><span class="title">（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览</span></a><a class="item" href="\（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden.html" title="（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden"><span class="title">（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden</span></a><a class="item" href="\（二）基于syncthing+oss+云服务器的文件同步与数据备份教程.html" title="（二）基于syncthing+oss+云服务器的文件同步与数据备份教程"><span class="title">（二）基于syncthing+oss+云服务器的文件同步与数据备份教程</span></a><a class="item" href="\（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法.html" title="（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法"><span class="title">（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法</span></a></div></section></div>
 
 
   <div class="related-wrap md-text" id="comments">
