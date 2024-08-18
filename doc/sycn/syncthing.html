@@ -1,0 +1,781 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>workflow：（二）基于syncthing+oss+云服务器的文件同步与数据备份教程 - Mr. Hu</title>
+
+  
+    <meta name="description" content="摘要从需求分析到具体实现，快速实现基于syncthing+oss+云服务器的文件同步与数据备份，此专栏的目的是充分利用云服务器，所以没有选择CDN，而是通过oss内外访问云服务，以云服务器为出口进行同步。 前言需求 数据安全，最重要的一个需求 备份容量，目前需求100G左右 价格不贵，百度云vip188&#x2F;年，以他为标准，浮动100左右 下载速度快，最起码别是100多kb&#x2F;s 可">
+<meta property="og:type" content="website">
+<meta property="og:title" content="（二）基于syncthing+oss+云服务器的文件同步与数据备份教程">
+<meta property="og:url" content="https://www.huzhihao.top/doc/sycn/syncthing.html">
+<meta property="og:site_name" content="Mr. Hu">
+<meta property="og:description" content="摘要从需求分析到具体实现，快速实现基于syncthing+oss+云服务器的文件同步与数据备份，此专栏的目的是充分利用云服务器，所以没有选择CDN，而是通过oss内外访问云服务，以云服务器为出口进行同步。 前言需求 数据安全，最重要的一个需求 备份容量，目前需求100G左右 价格不贵，百度云vip188&#x2F;年，以他为标准，浮动100左右 下载速度快，最起码别是100多kb&#x2F;s 可">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.huzhihao.top/syncthing/IMG-28E480D85B9338873F4DF3FB4CBAE96D.png">
+<meta property="og:image" content="https://www.huzhihao.top/syncthing/IMG-12791522D5E2F071AC6C297D2C2C952F.png">
+<meta property="og:image" content="https://www.huzhihao.top/syncthing/IMG-6228A21F0138D59FCD371FA06D51BF4B.png">
+<meta property="og:image" content="https://www.huzhihao.top/syncthing/IMG-4111643E8C905F4397E03E7A80363457.png">
+<meta property="og:image" content="https://www.huzhihao.top/syncthing/IMG-426680551F6B7D61A42F59EC0AF50C28.png">
+<meta property="og:image" content="https://www.huzhihao.top/syncthing/IMG-342913A5CF6C4A8927D58FDFFA8E3D20.png">
+<meta property="og:image" content="https://www.huzhihao.top/syncthing/IMG-0679E38CC725434FDE0DF3AD1994B266.png">
+<meta property="article:published_time" content="2024-07-13T03:28:34.000Z">
+<meta property="article:modified_time" content="2024-07-13T03:28:34.000Z">
+<meta property="article:author" content="Huzhihao">
+<meta property="article:tag" content="syncting">
+<meta property="article:tag" content="同步">
+<meta property="article:tag" content="备份">
+<meta property="article:tag" content="工作流">
+<meta property="article:tag" content="轻量云服务器">
+<meta property="article:tag" content="oss">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.huzhihao.top/syncthing/IMG-28E480D85B9338873F4DF3FB4CBAE96D.png">
+  
+  
+  
+  <meta name="keywords" content=",,,,,">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+    <link rel="shortcut icon" href="/images/favicon-28-dog.svg">
+  
+
+  
+
+  
+</head>
+<body>
+
+
+
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="/images/workflow.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/doc/workflow/workflow.html"><div class="main" ff="title">workflow</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/doc/workflow/" placeholder="在 workflow 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item" title="专栏" href="/topic/"><span>专栏</span></a><a class="nav-item active" title="文档" href="/wiki/"><span>文档</span></a><a class="nav-item" title="关于" href="/about/"><span>关于</span></a></nav>
+</div>
+<div class="widgets">
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">快速开始</span></div><div class="widget-body fs14"><a class="link" href="/doc/workflow/workflow.html#start"><span class="toc-text">（一）充分利用云服务器，如何围绕云服务器搭建自己的工作流</span></a></div><div class="widget-header dis-select"><span class="name">...</span></div><div class="widget-body fs14"><a class="link" href="/doc/3xui/3xui.html"><span class="toc-text">（七）3xui面版搭建Reality协议，使用链式代理，最简单的魔法</span></a><a class="link" href="/doc/alist/alist.html"><span class="toc-text">（六）alist的多种搭建方式，优化分享链接，实现浏览器直接预览</span></a><a class="link" href="/doc/bitwardn/bitwarden.html"><span class="toc-text">（五）多种方法搭建私有bitwardn服务器   bitwarden & Vaultwarden</span></a><a class="link" href="/doc/hexo-blog/hexo.html"><span class="toc-text">（四）Hexo搭建个人博客，Stellar主题美化教程，hexo结合obsidian实现一键发布</span></a><a class="link" href="/doc/nginx/nginx.html"><span class="toc-text">（三）Nginx 反向代理速成教学与泛域名证书的申请</span></a><a class="link active" href="/doc/sycn/syncthing.html"><span class="toc-text">（二）基于syncthing+oss+云服务器的文件同步与数据备份教程</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a></div></widget>
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/Missiu" target="_blank" rel="external nofollow noopener noreferrer"><img no-lazy src="/images/github.svg" / onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="social" href="https://blog.csdn.net/qq_68001015?type=blog" target="_blank" rel="external nofollow noopener noreferrer"><img no-lazy src="/images/csdn.svg" / onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a></div></footer>
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/doc/workflow/workflow.html">workflow</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-07-13T03:28:34.000Z">2024-07-13</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>（二）基于syncthing+oss+云服务器的文件同步与数据备份教程</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>从需求分析到具体实现，快速实现基于syncthing+oss+云服务器的文件同步与数据备份，此专栏的目的是充分利用云服务器，所以没有选择CDN，而是通过oss内外访问云服务，以云服务器为出口进行同步。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><ol>
+<li><strong>数据安全</strong>，最重要的一个需求</li>
+<li><strong>备份容量</strong>，目前需求100G左右</li>
+<li><strong>价格不贵</strong>，百度云vip188&#x2F;年，以他为标准，浮动100左右</li>
+<li><strong>下载速度快</strong>，最起码别是100多kb&#x2F;s</li>
+<li><strong>可预览</strong>，可以线上看看图片、视频什么的</li>
+<li><strong>多端同步</strong>：最起码要可以把手机和电脑数据同步起来，最起码要有版本控制，以及多种同步类型</li>
+<li><strong>自动备份</strong>：要能自动备份多个不同的文件夹，比如图片、文档什么的</li>
+</ol>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
+<li>Syncthing 是多端同步的工具，其功能类似于微力同步，但是<strong>开源</strong>，他是P2P的，这样就要求两个设备必须同时在线。</li>
+<li>使用云服务器搭建Syncthing作为中转和备份服务器，这样就可以只一个设备在线，因为云服务器是不停机的</li>
+<li>如果是需要经常同步的我选择直接存在服务器的云盘里</li>
+<li>如果是备份，我在云服务器里挂载OSS为目录，通过内网访问OSS，这样就没有流量费用</li>
+<li>使用alist挂载云服务器本地目录+rclone挂载Alist到电脑进行预览（可选）</li>
+</ul>
+<h2 id="页面展示"><a href="#页面展示" class="headerlink" title="页面展示"></a>页面展示</h2><h3 id="Syncthing-服务器"><a href="#Syncthing-服务器" class="headerlink" title="Syncthing - 服务器"></a>Syncthing - 服务器</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/syncthing/IMG-28E480D85B9338873F4DF3FB4CBAE96D.png"></p>
+<h3 id="Syncthing-电脑"><a href="#Syncthing-电脑" class="headerlink" title="Syncthing - 电脑"></a>Syncthing - 电脑</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/syncthing/IMG-12791522D5E2F071AC6C297D2C2C952F.png"></p>
+<h3 id="Syncthing-安卓"><a href="#Syncthing-安卓" class="headerlink" title="Syncthing - 安卓"></a>Syncthing - 安卓</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/syncthing/IMG-6228A21F0138D59FCD371FA06D51BF4B.png"></p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><ol>
+<li>服务器带宽 30M ，同步和备份时速度可接受，内存占用为100M以内</li>
+<li>存储容量：云盘自带60G+OSS的40G &#x3D; 100G</li>
+<li>电脑开机自启：Syncthing，完全无感</li>
+<li>手机可以后台常驻运行Syncthing，记得开启允许后台高耗电，以及设置息屏联网，实现无感同步。</li>
+</ol>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ol>
+<li>可以<strong>无感备份与同步任何文件</strong>！</li>
+<li>速度取决于你的服务器，无限速问题</li>
+<li><strong>数据很安全</strong>，用的都是开源项目，数据放在阿里云的服务器和OSS里，如果还不放心可以增加容灾设计</li>
+<li>可玩性较高，几乎完全满足需求！</li>
+<li>手机可以<strong>常驻后台备份</strong>！</li>
+</ol>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ol>
+<li>折腾起来比较麻烦</li>
+<li>手机常驻后台会增加发热问题</li>
+<li>syncthing 同步和冲突处理没有那么细的粒度</li>
+</ol>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><ol>
+<li>有时间可以整一个一键脚本，直接部署</li>
+<li>香港服务器都有了，顺便整点魔法</li>
+<li>整一个服务器监控看板</li>
+<li>把UI面版都整上Https</li>
+<li>如果想可以设计docker进行部署，需要注意容器编排和目录映射问题</li>
+</ol>
+<h1 id="准备好了吗！发车！"><a href="#准备好了吗！发车！" class="headerlink" title="准备好了吗！发车！"></a>准备好了吗！发车！</h1><ul>
+<li><strong>核心</strong>：Syncthing</li>
+<li><strong>需要</strong>：云服务器，OSS对象存储，电脑，手机</li>
+<li><strong>数据安全</strong>：数据为本地存储，云端则为阿里云服务器+OSS，次方案使用的项目均为开源项目</li>
+<li><strong>我的配置</strong>：阿里云香港轻量服务器（debian11），9元一年OSS标准存储资源包，Win10笔记本，安卓手机</li>
+<li><strong>实际花费</strong>：阿里云香港轻量服务器 <strong>288&#x2F;年</strong></li>
+<li>建议选择带宽较大的轻量服务器，大可以选择自己觉得便宜和稳定的，注意：<strong>服务器和oss存在地域问题</strong>！选同一个地域的，不然要nginx代理。</li>
+</ul>
+<h1 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h1><h2 id="安装Syncthing"><a href="#安装Syncthing" class="headerlink" title="安装Syncthing"></a>安装Syncthing</h2><h3 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home</span><br><span class="line"><span class="comment"># https://github.com/syncthing/syncthing/releases</span></span><br><span class="line">wget https://github.com/syncthing/syncthing/releases/download/v1.27.10/syncthing-linux-amd64-v1.27.10.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -xzvf  syncthing-linux-amd64-v1.27.10.tar.gz</span><br><span class="line"><span class="comment"># 删除压缩包</span></span><br><span class="line"><span class="built_in">rm</span> -f syncthing-linux-amd64-v1.27.10.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名(可选)</span></span><br><span class="line"><span class="built_in">mv</span> /home/syncthing-linux-amd64-v1.27.10 /home/syncthing</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建日志文件</span></span><br><span class="line"><span class="built_in">mkdir</span> /home/logs/</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">touch</span> /home/logs/syncthing.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改`/home/username/.config/syncthing/config.xml`中的`gui`标签，把`127.0.0.1`改成`0.0.0.0`，开启远程访问</span></span><br><span class="line"><span class="comment"># 如果你的usernam为root，那么config.xml在/root/.local/state/syncthing</span></span><br><span class="line"><span class="comment"># 可选的！后续会开启反向代理</span></span><br><span class="line">vim /root/.local/state/syncthing/config.xml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 官方文档：https://docs.syncthing.net/users/stdiscosrv.html</span></span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line"><span class="built_in">cd</span> /home/syncthing</span><br><span class="line"><span class="built_in">nohup</span> ./syncthing &gt; /home/logs/syncthing.log 2&gt;&amp;1 &amp;</span><br><span class="line"><span class="comment"># 使用jobs查看运行情况</span></span><br><span class="line"><span class="built_in">jobs</span></span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line"><span class="built_in">cat</span> /home/logs/syncthing.log</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker-compose-安装"><a href="#docker-compose-安装" class="headerlink" title="docker-compose 安装"></a>docker-compose 安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">目录：/home/docker/syncthing</span></span><br><span class="line">mkdir /home/docker/syncthing</span><br><span class="line">cd /home/docker/syncthing</span><br><span class="line">vi docker-compose.yml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">syncthing:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">syncthing/syncthing:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">syncthing</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">syncthing</span> <span class="comment">#optional</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PUID=1000</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PGID=1000</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./config:/config</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./Documents:/Documents</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./syncthing/Media:/Media</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/home/data:/home/data</span>  <span class="comment"># 此次配置额外添加的路径</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;8384:8384&#x27;</span> <span class="comment"># 面版端口</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="PC"><a href="#PC" class="headerlink" title="PC"></a>PC</h3><p>访问：<a target="_blank" rel="noopener" href="https://github.com/syncthing/syncthing">Github</a>下载windows版本的Syncthing，直接运行即可</p>
+<p>开机自启，后台运行：</p>
+<ol>
+<li>创建bat文件写入</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">start <span class="string">&quot;Syncthing&quot;</span> syncthing.exe -no-console -no-browser</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建快捷方式后，Win+R 输入 shell:startup，把快捷方式拖进去</li>
+</ol>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><p>访问：<a target="_blank" rel="noopener" href="https://github.com/syncthing/syncthing-android">Github</a>下载android版本的Syncthing，直接运行即可，给足权限，让他常驻后台</p>
+<h2 id="服务器挂载OSS"><a href="#服务器挂载OSS" class="headerlink" title="服务器挂载OSS"></a>服务器挂载OSS</h2><h3 id="oss的创建与配置"><a href="#oss的创建与配置" class="headerlink" title="oss的创建与配置"></a>oss的创建与配置</h3><p>资源包购买：<a target="_blank" rel="noopener" href="https://oss.console.aliyun.com/package">https://oss.console.aliyun.com/package</a><br>bucket创建：<a target="_blank" rel="noopener" href="https://oss.console.aliyun.com/bucket">https://oss.console.aliyun.com/bucket</a></p>
+<ul>
+<li>名称随意</li>
+<li>地域选择和自己服务器相同的地方</li>
+<li><strong>私有读写即可</strong>，因为我们是通过服务器出的公网流量，服务器和oss之间的访问用内网就行了，免费且高速，缺点是oss的访问速度全看服务器的带宽了。</li>
+</ul>
+<p>示例：<br>ECS地域<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/syncthing/IMG-4111643E8C905F4397E03E7A80363457.png"><br>OSS地域<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/syncthing/IMG-426680551F6B7D61A42F59EC0AF50C28.png"></p>
+<h3 id="挂载OSS到ECS"><a href="#挂载OSS到ECS" class="headerlink" title="挂载OSS到ECS"></a>挂载OSS到ECS</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入目录</span></span><br><span class="line"><span class="built_in">cd</span> /home</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新索引</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get -y update </span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装ossfs</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev \</span><br><span class="line">                     libfuse-dev libssl-dev libxml2-dev make pkg-config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆编译代码</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/aliyun/ossfs.git</span><br><span class="line"><span class="built_in">cd</span> ossfs</span><br><span class="line">./autogen.sh</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line"><span class="built_in">sudo</span> make install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置全局密钥，输入OSS对应的key和secret，不知道怎么获取看这个：</span></span><br><span class="line"><span class="comment"># https://blog.csdn.net/weixin_45606067/article/details/114292972</span></span><br><span class="line"><span class="comment"># my-access-key-id 你的key </span></span><br><span class="line"><span class="comment"># my-access-key-secret 你的secret</span></span><br><span class="line"><span class="comment"># my-bucket是你的存储空间名称</span></span><br><span class="line"><span class="built_in">echo</span> my-bucket:my-access-key-id:my-access-key-secret &gt; /etc/passwd-ossfs</span><br><span class="line"><span class="comment"># 也可以进行编辑</span></span><br><span class="line">vim /etc/passwd-ossfs</span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> 600 /etc/passwd-ossfs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 挂载oss目录</span></span><br><span class="line"><span class="comment"># /path/to/mountpoint是你挂载到的服务器上的目录</span></span><br><span class="line"><span class="comment"># my-oss-endpoint是你oss的访问域，一定要选内网的！</span></span><br><span class="line">ossfs my-bucket /path/to/mountpoint -ourl=my-oss-endpoint</span><br><span class="line"><span class="comment"># 示例</span></span><br><span class="line"><span class="built_in">mkdir</span> /home/data/blog</span><br><span class="line">ossfs my-notes-blog /home/data/blog -ourl=oss-cn-hongkong-internal.aliyuncs.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看挂载情况（可选）</span></span><br><span class="line"><span class="built_in">df</span> | grep ossfs</span><br><span class="line"><span class="comment"># 详细情况（可选）</span></span><br><span class="line"><span class="comment"># /root/Data/OSS 是挂载的路径</span></span><br><span class="line"><span class="built_in">df</span> -hT  /root/Data/OSS</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除挂载点（可选）</span></span><br><span class="line"><span class="built_in">sudo</span> umount /root/Data/OSS</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>我这里挂载了两个目录，syncthing使用的oss和我后续博客上推使用的oss是两个不同的存储空间，但是都是和服务器在同一个地域<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/syncthing/IMG-342913A5CF6C4A8927D58FDFFA8E3D20.png"></p>
+<h2 id="配置Syncthing"><a href="#配置Syncthing" class="headerlink" title="配置Syncthing"></a>配置Syncthing</h2><h3 id="搭建发现服务器"><a href="#搭建发现服务器" class="headerlink" title="搭建发现服务器"></a>搭建发现服务器</h3><p>先通过发现服务器 (Discosrv)发现和索引用户，当用户设备接入发现服务器后，服务器会进行设备的连接通告，当设备之间同意连接后进行连接；两台设备建立连接后，数据需要通过 NAT 穿透的方式实现交换。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/syncthing</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仓库在：https://github.com/syncthing/discosrv/releases，想用新的直接换新链接就行</span></span><br><span class="line">wget https://github.com/syncthing/discosrv/releases/download/v1.23.4/stdiscosrv-linux-amd64-v1.23.4.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -xzvf  stdiscosrv-linux-amd64-v1.23.4.tar.gz</span><br><span class="line"><span class="comment"># 删除压缩包</span></span><br><span class="line"><span class="built_in">rm</span> -f stdiscosrv-linux-amd64-v1.23.4.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名(可选)</span></span><br><span class="line"><span class="built_in">mv</span> stdiscosrv-linux-amd64-v1.23.4 stdiscosrv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建日志文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">touch</span> /home/logs/stdiscosrv.log</span><br><span class="line"><span class="comment"># 官方文档：https://docs.syncthing.net/users/stdiscosrv.html</span></span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line"><span class="built_in">cd</span> stdiscosrv</span><br><span class="line"><span class="built_in">nohup</span> ./stdiscosrv &gt; /home/logs/stdiscosrv.log 2&gt;&amp;1 &amp;</span><br><span class="line"><span class="comment"># 使用jobs查看运行情况</span></span><br><span class="line"><span class="built_in">jobs</span></span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line"><span class="built_in">cat</span> /home/logs/stdiscosrv.log</span><br></pre></td></tr></table></figure>
+
+<h3 id="搭建中继节点"><a href="#搭建中继节点" class="headerlink" title="搭建中继节点"></a>搭建中继节点</h3><p>如果 NAT 穿透不成功，就需要中继 (Relaysrv)服务器传输数据，假如电脑要和手机进行笔记同步，通信过程就是：电脑-中继-手机，当然Syncthing自带有公共网络服务，但是此文章使用云服务器就是为了搭建一个中继的通信过程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/syncthing</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仓库在：https://github.com/syncthing/discosrv/releases，想用新的直接换新链接就行</span></span><br><span class="line">wget https://github.com/syncthing/relaysrv/releases/download/v1.22.1/strelaysrv-linux-amd64-v1.22.1.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar -xzvf  strelaysrv-linux-amd64-v1.22.1.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除压缩包</span></span><br><span class="line"><span class="built_in">rm</span> -f strelaysrv-linux-amd64-v1.22.1.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名(可选)</span></span><br><span class="line"><span class="built_in">mv</span> strelaysrv-linux-amd64-v1.22.1 strelaysrv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建日志文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">touch</span> /home/logs/strelaysrv.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行 </span></span><br><span class="line"><span class="comment"># https://docs.syncthing.net/users/strelaysrv.html</span></span><br><span class="line"><span class="comment"># pools为空是不加入公共中继节点，部署为私有</span></span><br><span class="line"><span class="built_in">cd</span> strelaysrv</span><br><span class="line"><span class="built_in">nohup</span> ./strelaysrv -pools=<span class="string">&quot;&quot;</span>  &gt; /home/logs/strelaysrv.log 2&gt;&amp;1 &amp;</span><br><span class="line"><span class="comment"># 使用jobs查看运行情况</span></span><br><span class="line"><span class="built_in">jobs</span></span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line"><span class="built_in">cat</span> /home/logs/strelaysrv.log</span><br></pre></td></tr></table></figure>
+
+<p>可以先配置反向代理和泛域名证书，详细见nginx章节，配置文件如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># syncthing</span><br><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name sync.exp.com;</span><br><span class="line">    </span><br><span class="line">    ssl_certificate /etc/nginx/cert/exp.top.cer;</span><br><span class="line">    ssl_certificate_key /etc/nginx/cert/exp.top.key;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:8384/;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再回来配置syncthing，记得给电脑、服务器、手机都配置一下，协议监听地址对应中继节点地址，全局发现服务器和全局发现的地址。还有记得开放端口：22067&#x2F;tcp 和  	8443&#x2F;tcp</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line"><span class="built_in">cat</span> /home/logs/strelaysrv.log</span><br><span class="line"><span class="built_in">cat</span> /home/logs/stdiscosrv.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 协议监听地址，中继服务URI  </span></span><br><span class="line">relay://公网IP:22067?<span class="built_in">id</span>=中继服务器device ID  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 全局发现服务器  </span></span><br><span class="line">https://公网IP:8443/?<span class="built_in">id</span>=发现服务器device ID</span><br><span class="line">https://8.217.37.89:8443/?<span class="built_in">id</span>=VDAIJYD-6NT2WLV-5KUZUGL-7WVJZZI-H5LEFBT-GMP35YN-LHYXKK6-BUC7OAP</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>记得每个安装了sync的设备都要设置！<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/syncthing/IMG-0679E38CC725434FDE0DF3AD1994B266.png"></p>
+<h3 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h3><p>举个例子：文件夹路径是本地计算机的路径，比如我们现在需要电脑同步到服务器，那么过程就是</p>
+<ol>
+<li>打开电脑上的 syncthing <code>http://127.0.0.1:8384/</code>，添加文件夹，路径选择自己电脑本地的要上传的文件路径，如：<code>D:\My\Notes</code>，在共享里选择服务器上的 syncthing</li>
+<li>打开服务器上的 syncthing ，你会看到发过来的共享请求，那么在接受后的配置里面，选择你需要保存在服务器上的地址，比如挂载后的OSS地址或者服务器的其他地方</li>
+</ol>
+<p>现在如果你需要再同步给手机，那么就选择服务器上电脑发过来的共享文件夹，同样的点击共享就可以分享到手机</p>
+
+<div class="article-footer fs14">
+    <section id="references">
+      <div class="header"><span>参考资料</span></div>
+      <div class="body">
+        <ul>
+        <li class="post-title">
+          <p><a target="_blank" rel="noopener" href="https://github.com/syncthing/discosrv">discosrv</a></p>
+
+        </li>
+        
+        <li class="post-title">
+          <p><a target="_blank" rel="noopener" href="https://github.com/aliyun/ossfs">ossfs</a></p>
+
+        </li>
+        
+        <li class="post-title">
+          <p><a target="_blank" rel="noopener" href="https://github.com/syncthing/relaysrv">relaysrv</a></p>
+
+        </li>
+        
+        <li class="post-title">
+          <p><a target="_blank" rel="noopener" href="https://github.com/syncthing/syncthing-android">syncthing-android</a></p>
+
+        </li>
+        
+        <li class="post-title">
+          <p><a target="_blank" rel="noopener" href="https://github.com/syncthing/syncthing">syncthing</a></p>
+
+        </li>
+        </ul>
+      </div>
+    </section>
+    
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文由 <a href="/about/">Mr. Hu</a> 原创, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+    <section id="share">
+      <div class="header"><span>分享文章</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://www.huzhihao.top/doc/sycn/syncthing.html" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://www.huzhihao.top/doc/sycn/syncthing.html&title=（二）基于syncthing+oss+云服务器的文件同步与数据备份教程 - Mr. Hu&summary=摘要从需求分析到具体实现，快速实现基于syncthing+oss+云服务器的文件同步与数据备份，此专栏的目的是充分利用云服务器，所以没有选择CDN，而是通过oss内外访问云服务，以云服务器为出口进行同步。
+前言需求
+数据安全，最重要的..."><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/80c07e4dbb303.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+        <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
+          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://www.huzhihao.top/doc/sycn/syncthing.html"/>
+        </div>
+        
+      </div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/doc/nginx/nginx.html">（三）Nginx 反向代理速成教学与泛域名证书的申请</a></div><div class="item" id="next"></div></section></div>
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>评论区仅供交流，有问题请提 <a target="_blank" rel="noopener" href="https://github.com/Missiu/Beaudar-Comments/issues">issue</a> 反馈。</p>
+
+    </section>
+    <section class='body cmt-body beaudar'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="beaudar" repo="Missiu/Beaudar-Comments" issue-term="pathname" theme="preferred-color-scheme" input-position="top" comment-order="desc" loading="false" branch="main"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"></div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="auto"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%91%98%E8%A6%81"><span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA"><span class="toc-text">页面展示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Syncthing-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">Syncthing - 服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Syncthing-%E7%94%B5%E8%84%91"><span class="toc-text">Syncthing - 电脑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Syncthing-%E5%AE%89%E5%8D%93"><span class="toc-text">Syncthing - 安卓</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="toc-text">效果展示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95"><span class="toc-text">拓展</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%A5%BD%E4%BA%86%E5%90%97%EF%BC%81%E5%8F%91%E8%BD%A6%EF%BC%81"><span class="toc-text">准备好了吗！发车！</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E6%93%8D"><span class="toc-text">实操</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Syncthing"><span class="toc-text">安装Syncthing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-compose-%E5%AE%89%E8%A3%85"><span class="toc-text">docker-compose 安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PC"><span class="toc-text">PC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Android"><span class="toc-text">Android</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BDOSS"><span class="toc-text">服务器挂载OSS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#oss%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-text">oss的创建与配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%82%E8%BD%BDOSS%E5%88%B0ECS"><span class="toc-text">挂载OSS到ECS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-text">注意</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AESyncthing"><span class="toc-text">配置Syncthing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E5%8F%91%E7%8E%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">搭建发现服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E4%B8%AD%E7%BB%A7%E8%8A%82%E7%82%B9"><span class="toc-text">搭建中继节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="toc-text">配置说明</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"codeblock":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  const el = document.querySelector('#comments #beaudar');
+  util.viewportLazyload(el, load_beaudar, false);
+
+  function load_beaudar() {
+    if (!el) return;
+    try {
+      el.innerHTML = '';
+    } catch (error) {
+      console.error(error);
+    }
+    const script = document.createElement('script');
+    script.src = 'https://beaudar.lipk.org/client.js';
+    script.async = true;
+    for (const key of Object.keys(el.attributes)) {
+      const attr = el.attributes[key];
+      if (['class', 'id'].includes(attr.name) === false) {
+        script.setAttribute(attr.name, attr.value);
+      }
+    }
+    el.appendChild(script);
+  }
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
