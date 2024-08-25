@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: imc6f-djocc
+created: 2024-08-25T15:55:35+08:00
