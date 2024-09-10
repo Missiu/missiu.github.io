@@ -1,0 +1,765 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>intvSum：Java基础进阶 - Mr. Hu</title>
+
+  
+    <meta name="description" content="序列化Java序列化与反序列化是什么？为什么需要 序列化是指把一个Java对象变成二进制内容，本质上就是一个byte[]数组。以便能够将该对象保存到文件、数据库，或者进行网络传输 反序列化就负责从一个字节流读取Java对象。以便构建原始对象。  Serializable 接口有什么用？ Serializable接口用于标记一个类可以被序列化。这个接口没有定义任何方法，它是一个空接口 serialV">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Java基础进阶">
+<meta property="og:url" content="https://www.huzhihao.top/intvSum/JavaAdv.html">
+<meta property="og:site_name" content="Mr. Hu">
+<meta property="og:description" content="序列化Java序列化与反序列化是什么？为什么需要 序列化是指把一个Java对象变成二进制内容，本质上就是一个byte[]数组。以便能够将该对象保存到文件、数据库，或者进行网络传输 反序列化就负责从一个字节流读取Java对象。以便构建原始对象。  Serializable 接口有什么用？ Serializable接口用于标记一个类可以被序列化。这个接口没有定义任何方法，它是一个空接口 serialV">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.huzhihao.top/intvSum/JavaAdv/IMG-B7F3A2DC37F0D0660DF5DD91F0090DA0.png">
+<meta property="article:published_time" content="2024-08-27T05:52:29.000Z">
+<meta property="article:modified_time" content="2024-08-27T05:52:29.000Z">
+<meta property="article:author" content="Huzhihao">
+<meta property="article:tag" content="计算机">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="网站">
+<meta property="article:tag" content="博客">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="服务器">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="后端">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.huzhihao.top/intvSum/JavaAdv/IMG-B7F3A2DC37F0D0660DF5DD91F0090DA0.png">
+  
+  
+  
+  <meta name="keywords" content="计算机,开发,编程,网站,博客,技术,学习,教程,服务器,Java,后端">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+    <link rel="shortcut icon" href="/images/favicon-28-dog.svg">
+  
+
+  
+
+  
+</head>
+<body>
+
+
+
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="/images/intvSum.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/intvSum/JavaAdv.html"><div class="main" ff="title">intvSum</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/intvSum/" placeholder="在 intvSum 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item" title="专栏" href="/topic/"><span>专栏</span></a><a class="nav-item active" title="文档" href="/wiki/"><span>文档</span></a><a class="nav-item" title="关于" href="/about/"><span>关于</span></a></nav>
+</div>
+<div class="widgets">
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">Java</span></div><div class="widget-body fs14"><a class="link active" href="/intvSum/JavaAdv.html#start"><span class="toc-text">Java基础进阶</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/intvSum/JavaBasic.html"><span class="toc-text">(三). 夯实基础 - Java 常见面试题</span></a><a class="link" href="/intvSum/JavaThread.html"><span class="toc-text">Java并发编程</span></a><a class="link" href="/intvSum/JVM.html"><span class="toc-text">JVM 相关知识与面试题的结合</span></a></div><div class="widget-header dis-select"><span class="name">中间件</span></div><div class="widget-body fs14"><a class="link" href="/intvSum/MQ.html"><span class="toc-text">MQ</span></a></div></widget>
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/Missiu" target="_blank" rel="external nofollow noopener noreferrer"><img no-lazy src="/images/github.svg" / onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="social" href="https://blog.csdn.net/qq_68001015?type=blog" target="_blank" rel="external nofollow noopener noreferrer"><img no-lazy src="/images/csdn.svg" / onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a></div></footer>
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/intvSum/JavaAdv.html">intvSum</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2024-08-27T05:52:29.000Z">2024-08-27</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Java基础进阶</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><h2 id="Java序列化与反序列化是什么？为什么需要"><a href="#Java序列化与反序列化是什么？为什么需要" class="headerlink" title="Java序列化与反序列化是什么？为什么需要"></a>Java序列化与反序列化是什么？为什么需要</h2><ul>
+<li>序列化是指把一个Java对象变成二进制内容，本质上就是一个<code>byte[]</code>数组。以便能够将该对象保存到文件、数据库，或者进行网络传输</li>
+<li>反序列化就负责从一个字节流读取Java对象。以便构建原始对象。</li>
+</ul>
+<h2 id="Serializable-接口有什么用？"><a href="#Serializable-接口有什么用？" class="headerlink" title="Serializable 接口有什么用？"></a>Serializable 接口有什么用？</h2><ul>
+<li><code>Serializable</code>接口用于标记一个类可以被序列化。这个接口没有定义任何方法，它是一个空接口</li>
+<li><code>serialVersionUID</code> 是 Java 序列化机制中用于标识类版本的唯一标识符。它的作用是确保在序列化和反序列化过程中，类的版本是兼容的，一般设置为1L，也可以有idea随机生成，只要保证在序列化和反序列化的过程中是一致的即可。当然如果不设置，java序列化机制会根据Class自动生成一个serialVersionUID。</li>
+</ul>
+<h2 id="Java序列化有什么安全问题没"><a href="#Java序列化有什么安全问题没" class="headerlink" title="Java序列化有什么安全问题没"></a>Java序列化有什么安全问题没</h2><p>因为Java的序列化机制可以导致一个实例能直接从<code>byte[]</code>数组创建，而不经过构造方法，因此，它存在一定的安全隐患。一个精心构造的<code>byte[]</code>数组被反序列化后可以执行特定的Java代码，从而导致严重的安全漏洞。</p>
+<p>实际上，Java本身提供的基于对象的序列化和反序列化机制既存在安全性问题，也存在兼容性问题。更好的序列化方法是通过JSON这样的通用数据结构来实现，只输出基本类型（包括String）的内容，而不存储任何与代码相关的信息。</p>
+<h2 id="ArrayList是怎么进行序列化的？"><a href="#ArrayList是怎么进行序列化的？" class="headerlink" title="ArrayList是怎么进行序列化的？"></a>ArrayList是怎么进行序列化的？</h2><p>比如数组长度为100但其实只用了70，剩下的30就不用序列化，这样不但提高效率还节省空间。</p>
+<p>在源码中arraylist定义了readObject和writeObject用于序列化和反序列化，还使用了transient来修饰存储元素的<code>elementData</code>的数组，让成员属性不被序列化，在arraylist序列化的时候会先序列化没有被static、transient修饰的的字段，然后遍历数组，将存储元素的elementData的值取出来，然后写入输出流。反序列化类似，主要是在反序列化的时候需要把数组扩容到原始（被序列化前的）大小</p>
+<h1 id="I-O"><a href="#I-O" class="headerlink" title="I&#x2F;O"></a>I&#x2F;O</h1><h2 id="Java-中-IO-流分为几种"><a href="#Java-中-IO-流分为几种" class="headerlink" title="Java 中 IO 流分为几种?"></a>Java 中 IO 流分为几种?</h2><p>Java IO 流的划分可以根据多个维度进行，包括数据流的方向（输入或输出）、处理的数据单位（字节或字符）、流的功能以及流是否支持随机访问等。</p>
+<p>方向：</p>
+<ul>
+<li>输入流（Input Stream）：从源（如文件、网络等）读取数据到程序。</li>
+<li>输出流（Output Stream）：将数据从程序写出到目的地（如文件、网络、控制台等）</li>
+</ul>
+<p>单位：</p>
+<ul>
+<li>字节流（Byte Streams）：以字节为单位读写数据，主要用于处理二进制数据，如音频、图像文件等。</li>
+<li>字符流（Character Streams）：以字符为单位读写数据，主要用于处理文本数据。</li>
+</ul>
+<p>功能：</p>
+<ul>
+<li>节点流（Node Streams）：直接与数据源或目的地相连，如 FileInputStream、FileOutputStream。</li>
+<li>处理流（Processing Streams）：对一个已存在的流进行包装，如缓冲流 BufferedInputStream、BufferedOutputStream。</li>
+<li>管道流（Piped Streams）：用于线程之间的数据传输，如 PipedInputStream、PipedOutputStream。</li>
+</ul>
+<h2 id="IO-流用到了什么设计模式？（待定）"><a href="#IO-流用到了什么设计模式？（待定）" class="headerlink" title="IO 流用到了什么设计模式？（待定）"></a>IO 流用到了什么设计模式？（待定）</h2><h2 id="文本存储是字节流还是字符流，视频文件呢？"><a href="#文本存储是字节流还是字符流，视频文件呢？" class="headerlink" title="文本存储是字节流还是字符流，视频文件呢？"></a>文本存储是字节流还是字符流，视频文件呢？</h2><p>无论是文本还是视频文件他们在物理层面都是以字节流的形式进行存放，区别在于我们怎么通过Java来处理和解释这些字节流，也就是编码后是作为字符流，还是二进制数据（字节流）。</p>
+<p>那其实字符流就是由字节流通过虚拟机转化而来，为什么要转化？就是因为字节转化为字符比较耗时，而且还得注意编码类型。所以不如直接搞一个操作字符的IO接口，方便我们平时对字符进行操作，但是平时传音频、视频、图片这些还是使用字节流。</p>
+<h2 id="BIO、NIO、AIO-之间的区别？"><a href="#BIO、NIO、AIO-之间的区别？" class="headerlink" title="BIO、NIO、AIO 之间的区别？"></a>BIO、NIO、AIO 之间的区别？</h2><p>这三对应着阻塞 IO、非阻塞 IO 和异步 IO。</p>
+<ul>
+<li>BIO：也就是传统的 IO，基于字节流或字符流（如 FileInputStream、BufferedReader 等）进行文件读写，基于 Socket 和 ServerSocket 进行网络通信。对于每个连接，都需要创建一个独立的线程来处理读写操作。线程在执行 I&#x2F;O 操作时被阻塞，无法处理其他任务，适用于连接数较少的场景</li>
+<li>NIO：JDK 1.4 时引入，放在 java.nio 包下，提供了 Channel、Buffer、Selector 等新的抽象，基于 RandomAccessFile、FileChannel、ByteBuffer 进行文件读写，基于 SocketChannel 和 ServerSocketChannel 进行网络通信。实际上，“旧”的 I&#x2F;O 包已经使用 NIO 重新实现过，所以在进行文件读写时，NIO 并无法体现出比 BIO 更可靠的性能。NIO 的魅力主要体现在网络编程中，服务器可以用一个线程处理多个客户端连接，通过 Selector 监听多个 Channel 来实现多路复用，极大地提高了网络编程的性能。适用于连接数多但连接时间短的场景。</li>
+<li>AIO 是 Java 7 引入的，放在 java.nio.channels 包下，提供了 AsynchronousFileChannel、AsynchronousSocketChannel 等异步 Channel。它引入了异步通道的概念，使得 I&#x2F;O 操作可以异步进行。这意味着线程发起一个读写操作后不必等待其完成，可以立即进行其他任务，并且当读写操作真正完成时，线程会被异步地通知。</li>
+</ul>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><h2 id="什么是Java泛型，你怎么理解他的？"><a href="#什么是Java泛型，你怎么理解他的？" class="headerlink" title="什么是Java泛型，你怎么理解他的？"></a>什么是Java泛型，你怎么理解他的？</h2><p>泛型的本质是<strong>参数化类型</strong>，也就是说所操作的数据类型被指定为一个参数。在Java里可以用来限定集合类型、列表类型那些，也可以避免不同类型数据取出时强转引发的异常</p>
+<h2 id="什么是类型擦除？"><a href="#什么是类型擦除？" class="headerlink" title="什么是类型擦除？"></a>什么是类型擦除？</h2><p>泛型擦除指的是参数类型在编译之后就被抹去了，也就是生成的class文件是没有泛型信息的，所以称之为擦除。但是在代码里写死的泛型类型是不会被擦除的，这也解释了为什么根据反射是可以拿到泛型信息的。因为在JDK5之前是没有泛型的，所以要保证JDK5之前编译的代码可以在之后的版本上跑，而类型擦除就是能达到这一目标的一个实现手段。（ &#x3D;&#x3D;向下兼容&#x3D;&#x3D; ）</p>
+<h2 id="介绍一下常用的通配符？什么是Java沃泛型的上下界限定符？"><a href="#介绍一下常用的通配符？什么是Java沃泛型的上下界限定符？" class="headerlink" title="介绍一下常用的通配符？什么是Java沃泛型的上下界限定符？"></a>介绍一下常用的通配符？什么是Java沃泛型的上下界限定符？</h2><ul>
+<li>？：未知类型</li>
+<li>T：一个具体的Java类型</li>
+<li>K V：键值对里的kv</li>
+<li>E：集合中的元素类型</li>
+</ul>
+<p>上界限定符是extends，下界限定符是super，<code>&lt;? extends T&gt;</code>表示类型的上界，？这个类型要么T，要么是T的子类，<code>&lt;? super T&gt;</code>表示类型的下界，？这个类型是T的父类型，直到Object。也就是extends，是从我们希望类型或者子类型的数据中进行读取，是帮我们生产我们希望类型数据，而super是要往方法中传我们希望的类型，是帮我们消费。</p>
+<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="你使用过Java的反射机制吗？如何应用反射？"><a href="#你使用过Java的反射机制吗？如何应用反射？" class="headerlink" title="你使用过Java的反射机制吗？如何应用反射？"></a>你使用过Java的反射机制吗？如何应用反射？</h2><p>一般在业务编码中不会用到反射，在框架上用的较多，因为很多场景需要很灵活，不确定目标对的类型，届时只能通过反射动态获取对象信息。</p>
+<p>比如在spring里就是使用使用反射机制来读取和解析配置文件，从而实现依赖注入和面向切面编等功能，比如动态代理场景可以使用反射机制在运行时动态地创建代理对象。还可以在测试的时候使用反射机制动态获取类和方法信息，实现自动化测试。</p>
+<p>所以我认为反射的核心就两个字 <strong>动态</strong>，动态的创建对象、动态的获取类信息、动态的改变对象的行为。我们都知道 Java 程序的执行分为编译和运行两步，编译之后会生成字节码(.class)文件，JVM 进行类加载的时候，会加载字节码文件，将类型相关的所有信息加载进方法区，反射就是去获取这些信息，然后进行各种操作。 这也造成反射存在性能问题，并且因为是动态的，会破坏方法的封装性。</p>
+<h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><h2 id="为什么String要设计成Final类"><a href="#为什么String要设计成Final类" class="headerlink" title="为什么String要设计成Final类?"></a>为什么String要设计成Final类?</h2><p>字符串本质是由char数组实现的（jdk9为byte），字符串的不可变也就是char数组不可变，假如我们通过反射方法获取到字符串的字段，并且强行更改char数组的值，那么在对相同字符串进行比较的时候，会出现equals方法为true，而hashcode却不一样，这违背了Java设计规则，也就是equals相同那么hashcode也应该相同（为了保证在使用哈希结构（如 <code>HashMap</code>、<code>HashSet</code>）时的正确性）。</p>
+<p>而且当String不可变，那么就可以放进常量池（保证指向常量池中的同一个对象），不但可以节约内存，而且更容易进行缓存和重用</p>
+<h2 id="String-和-StringBuilder、StringBuffer-的区别？"><a href="#String-和-StringBuilder、StringBuffer-的区别？" class="headerlink" title="String 和 StringBuilder、StringBuffer 的区别？"></a>String 和 StringBuilder、StringBuffer 的区别？</h2><ul>
+<li>String：不可变的，每次对象进行修改操作（如拼接、替换等）实际上都会生成一个新的<code>String</code>对象。（可能会导致内存和性能开销）</li>
+<li>StringBuffer：可变且线程安全，适合多线程环境中的频繁字符串修改。StringBuffer就是为了解决大量拼接字符串时产生很多中间对象问题而提供的一个类，把所有修改数据的方法都加上了synchronize，但是保证线程安全是需要付出性能代价的。</li>
+<li>StringBuilder：可变且非线程安全，适合单线程环境中的高性能字符串处理。和SringBuffer本质上没什么区别，就是去掉了保证线程安全的那部分，减少了开销。（很多情况下我们的字符串拼接操作不需要线程安全）</li>
+</ul>
+<h2 id="使用new-String-“abc”）语句在Java中会创建多少个对象？"><a href="#使用new-String-“abc”）语句在Java中会创建多少个对象？" class="headerlink" title="使用new String(“abc”）语句在Java中会创建多少个对象？"></a>使用new String(“abc”）语句在Java中会创建多少个对象？</h2><p>这个有两种情况，首先都会在堆中创建一个未被初始化的对象，然后从常量池里那找abc，找到了abc那就直接赋值，没找到就在堆内存里创建abc的String对象，然后保存他的引用到常量池，然后从常量池里获取并赋值，所以会有1到2个对象</p>
+<h2 id="为什么-Java-9-String-内部将-char-数组改为-byte-数组？（待定）"><a href="#为什么-Java-9-String-内部将-char-数组改为-byte-数组？（待定）" class="headerlink" title="为什么 Java 9 String 内部将 char 数组改为 byte 数组？（待定）"></a>为什么 Java 9 String 内部将 char 数组改为 byte 数组？（待定）</h2><p>为了优化存储空间，char占两个字符，而byte占一个，当然我们知道汉字哪些要占两个字符的空间，所以java引用了coder变量来标识编码方式，在保持兼容性的同时，又减少了内存占用。</p>
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><h2 id="ArrayList-和-LinkedList-有什么区别？"><a href="#ArrayList-和-LinkedList-有什么区别？" class="headerlink" title="ArrayList 和 LinkedList 有什么区别？"></a>ArrayList 和 LinkedList 有什么区别？</h2><p>ArrayList在底层是通过数组实现，而LinkedList是通过双向链表实现。我们都知道</p>
+<ul>
+<li>数组在内存中是连续的，通过索引访问，这就意味着数组如果知道索引就可以在O(1)的时间内查找到数据，但是同理因为在内存中是连续的，这就导致如果在删除&#x2F;新增元素（除开尾部删除&#x2F;新增）会让后续元素填补起空缺（向前移），因为数组涉及到扩容，那么在插入的时候还可能导致触发扩容让效率更低，这也就造就了数组的特性：查询效率高，增删效率低</li>
+<li>链表在内存是不连续的，通过设计节点结构记录其下&#x2F;上一个节点地址（单向、双向、循环、双向循环），这就意味着我们只能通过从头节点开始遍历节点元素来进行查找，而可以通直接修改某个节点的指向地址直接插入&#x2F;删除元素，这也就造就了链表的特性：查询效率低，增删效率高</li>
+</ul>
+<p>当然这不是一定的，比如数组的尾插尾删效率也很高，我们不能片面的说数组增删效率一定低于链表。LinkedList 更利于增删不是体现在时间复杂度上，因为二者增删的时间复杂度都是 O(n)，都需要遍历列表；而是体现在增删的效率上，因为 LinkedList 的增删只需要改变引用，而 ArrayList 的增删可能需要移动元素。</p>
+<p>回到题目，ArrayList和LinkedList结果显而易见：</p>
+<ul>
+<li>ArrayList：查询效率高、增删效率低、支持随机访问、可能导致内存浪费</li>
+<li>LinkedList：查询效率低，增删效率高、不支持随机访问、占用内存稍大</li>
+</ul>
+<h2 id="ArrayList的扩容机制了解吗？"><a href="#ArrayList的扩容机制了解吗？" class="headerlink" title="ArrayList的扩容机制了解吗？"></a>ArrayList的扩容机制了解吗？</h2><p>ArrayList 确切地说，应该叫做动态数组，因为它的底层是通过数组来实现的，当往 ArrayList 中添加元素时，会先检查是否需要扩容，如果当前容量+1 超过数组长度，就会进行扩容。扩容后的新数组长度是原来的 1.5 倍（当前数组长度加上其长度的的二进制右移一位 &gt;&gt;1 ），然后再把原数组的值拷贝到新数组中。更新ArrayList内部的引用，指向新数组。添加新元素到新数组中。</p>
+<h2 id="多线程相关："><a href="#多线程相关：" class="headerlink" title="多线程相关："></a>多线程相关：</h2><p><a target="_blank" rel="noopener" href="https://javabetter.cn/sidebar/sanfene/collection.html#_6-%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0-arraylist-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%B9%E6%B3%95">https://javabetter.cn/sidebar/sanfene/collection.html#_6-%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E5%AE%9E%E7%8E%B0-arraylist-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%B9%E6%B3%95</a></p>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><h2 id="能说一下-HashMap-的底层数据结构吗？"><a href="#能说一下-HashMap-的底层数据结构吗？" class="headerlink" title="能说一下 HashMap 的底层数据结构吗？"></a>能说一下 HashMap 的底层数据结构吗？</h2><p>在JDK8中，HashMap由一个桶数组和链表组成（哈西表），链表（O(n)）长度大于8且总长度大于64时会转化为红黑树（O(logn)）。HashMap 中每个元素称之为一个哈希桶（bucket），哈希桶包含的内容有 4 个：hash值、key、value、next</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/intvSum/JavaAdv/IMG-B7F3A2DC37F0D0660DF5DD91F0090DA0.png"></p>
+<p>在hashmap里数据添加的流程为可以概括为，先将 key 值进行 hash 得到哈希值，根据哈希值得到元素的索引，判断索引对应位置是否为空，如果为空直接插入，不为空判断是否为红黑树，如果是红黑树则直接插入，否则判断链表是否大于 8（和统计学有关，理想情况下，使用随机哈希码，链表里的节点符合泊松分布，出现节点个数的概率是递减的，节点个数为 8 的情况概率很低很低。至于红黑树转回链表的阈值为什么是 6，而不是 8？是因为如果这个阈值也设置成 8，假如发生碰撞，节点增减刚好在 8 附近，会发生链表和红黑树的不断转换，导致资源浪费），且数组长度大于 64，如果满足这两个条件则把链表转成红黑树，然后插入元素，如果不满足这两个条件中的任意一个，则遍历链表进行插入。</p>
+<p>HashMap 的初始容量是 16，随着元素的不断添加，HashMap 的容量（也就是数组大小）可能不足，于是就需要进行扩容，阈值是<code>capacity * loadFactor</code>，capacity 为容量，loadFactor 为负载因子，默认为 0.75。扩容后的数组大小是原来的 2 倍，然后把原来的元素重新计算哈希值，放到新的数组中</p>
+<p>hashCode() 是 Java 中自带的 hashCode() 方法，返回一个 int 类型的散列值，后面 hashCode 再右移 16 位（这样处理既考虑了高位的信息，又没有完全忽视低位原本的信息，尝试达到一个平衡状态），正好是 32bit 的一半，与自己本身做异或操作（相同为 0，不同为 1），主要是为了混合哈希值的高位和低位，增加低位的随机性，这样就实现了 HashMap 的哈希算法。而且为了减少hash冲突，让元素均匀地分布在数组当中，在hashmap里设计了负载因子让数组不必满了才添加，设计数组的容量为16和2倍扩容的机制，就是为了让数组长度保证为2 的整数次幂，这也符合其源码中hash值和数组长度相与（hash &amp; (n-1)）相当于取模，让每个元素相对均匀的存放（越均匀hash冲突越不容易发生）。就算发生hash冲突了，hashmap还会用eq方法进行比较，只有哈希一致和equals比较结果也相等才能说明插入的数据是同一个。</p>
+<p>hash &amp; (n-1)-&gt;低位掩码”——这个掩码的低位最好全是 1，实际上是保留 hash 二进制表示的最低 n 位，其他高位都被清零，这样 &amp; 操作才有意义，否则结果就肯定是 0。</p>
+<p>偶数-1 是奇数，奇数的二进制最后一位是 1，保证了 <code>hash &amp;(length-1)</code> 的最后一位可能为 0，也可能为 1（取决于 hash 的值），即 &amp; 运算后的结果可能为偶数，也可能为奇数，这样便可以保证哈希值的均匀分布</p>
+<h2 id="如果初始化-HashMap，传一个-17-容量，它会怎么处理？"><a href="#如果初始化-HashMap，传一个-17-容量，它会怎么处理？" class="headerlink" title="如果初始化 HashMap，传一个 17 容量，它会怎么处理？"></a>如果初始化 HashMap，传一个 17 容量，它会怎么处理？</h2><p>HashMap 会将这个值转换为大于或等于 17 的最小的 2 的幂，所以，如果你传入 17 作为初始容量，HashMap 实际上会被初始化为大小为 32 的哈希表。</p>
+<p>如果预先知道 Map 将存储大量键值对，提前指定一个足够大的初始容量可以减少因扩容导致的重哈希（rehashing）操作，从而提高性能。当然了，过大的初始容量会浪费内存，特别是当实际存储的元素远少于初始容量时。如果不指定初始容量，HashMap 将使用默认的初始容量 16。</p>
+<h2 id="解决哈希冲突有哪些方法呢？"><a href="#解决哈希冲突有哪些方法呢？" class="headerlink" title="解决哈希冲突有哪些方法呢？"></a>解决哈希冲突有哪些方法呢？</h2><ul>
+<li>再哈希法：准备两套哈希算法，当发生哈希冲突的时候，使用另外一种哈希算法，直到找到空槽为止。对哈希算法的设计要求比较高。</li>
+<li>开放地址法：<ul>
+<li>线性探测：从冲突的位置开始，依次往后找，直到找到空槽</li>
+<li>二次探测：从冲突的位置 x 开始，第一次增加 1^2 个位置，第二次增加 2^2，直到找到空槽。</li>
+<li>双重哈希：和再哈希法类似，准备多个哈希函数，发生冲突的时候，使用另外一个哈希函数</li>
+</ul>
+</li>
+<li>拉链法：也就是所谓的链地址法，当发生哈希冲突的时候，使用链表将冲突的元素串起来。HashMap 采用的正是拉链法。</li>
+</ul>
+<h2 id="你对红黑树了解多少？为什么不用二叉树-平衡树呢？"><a href="#你对红黑树了解多少？为什么不用二叉树-平衡树呢？" class="headerlink" title="你对红黑树了解多少？为什么不用二叉树&#x2F;平衡树呢？"></a>你对红黑树了解多少？为什么不用二叉树&#x2F;平衡树呢？</h2><p>红黑树是一种自平衡的二叉查找树</p>
+<ol>
+<li>每个节点要么是红色，要么是黑色；</li>
+<li>根节点永远是黑色；</li>
+<li>所有的叶子节点都是是黑色的（下图中的 NULL 节点）；</li>
+<li>红色节点的子节点一定是黑色的；</li>
+<li>从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。</li>
+</ol>
+<p>二叉树是最基本的树结构，每个节点最多有两个子节点，但是二叉树容易出现极端情况，比如插入的数据是有序的，那么二叉树就会退化成链表，查询效率就会变成 O(n)。</p>
+<p>平衡二叉树比红黑树的要求更高，每个节点的左右子树的高度最多相差 1，这种高度的平衡保证了极佳的查找效率，但在进行插入和删除操作时，可能需要频繁地进行旋转来维持树的平衡，这在某些情况下可能导致更高的维护成本。</p>
+<p>红黑树是一种折中的方案，它在保证了树平衡的同时，插入和删除操作的性能也得到了保证，查询效率是 O(logn)。</p>
+<h2 id="JDK-8-对-HashMap-主要做了哪些优化呢？为什么？"><a href="#JDK-8-对-HashMap-主要做了哪些优化呢？为什么？" class="headerlink" title="JDK 8 对 HashMap 主要做了哪些优化呢？为什么？"></a>JDK 8 对 HashMap 主要做了哪些优化呢？为什么？</h2><ul>
+<li>底层数据结构由数组 + 链表改成了数组 + 链表或红黑树的结构。如果多个键映射到了同一个哈希值，链表会变得很长，在最坏的情况下，当所有的键都映射到同一个桶中时，性能会退化到 O(n)，而红黑树的时间复杂度是 O(logn)</li>
+<li>链表的插入方式由头插法改为了尾插法。头插法虽然简单快捷，但扩容后容易改变原来链表的顺序。</li>
+<li>扩容的时机由插入时判断改为插入后判断。可以避免在每次插入时都进行不必要的扩容检查，因为有可能插入后仍然不需要扩容。</li>
+<li>优化了哈希算法。JDK 7 进行了多次移位和异或操作来计算元素的哈希值。JDK 8 优化了这个算法，只进行了一次异或操作，但仍然能有效地减少冲突。并且能够保证扩容后，元素的新位置要么是原位置，要么是原位置加上旧容量大小。</li>
+</ul>
+<h2 id="HashMap-是线程安全的吗？多线程下会有什么问题？"><a href="#HashMap-是线程安全的吗？多线程下会有什么问题？" class="headerlink" title="HashMap 是线程安全的吗？多线程下会有什么问题？"></a>HashMap 是线程安全的吗？多线程下会有什么问题？</h2><ul>
+<li>多线程下扩容会死循环。JDK1.7 中的 HashMap 使用的是头插法插入元素，在多线程的环境下，扩容的时候就有可能导致出现环形链表，造成死循环。JDK 8 时已经修复了这个问题，扩容时会保持链表原来的顺序。</li>
+<li>多线程的 put 可能会导致元素的丢失。因为计算出来的位置可能会被其他线程的 put 覆盖。本来哈希冲突是应该用链表的，但多线程时由于没有加锁，相同位置的元素可能就被干掉了。</li>
+<li>put 和 get 并发时，可能导致 get 为 null。线程 1 执行 put 时，因为元素个数超出阈值而导致出现扩容，线程 2 此时执行 get，就有可能出现这个问题。因为线程 1 执行完 table &#x3D; newTab 之后，线程 2 中的 table 此时也发生了变化，此时去 get 的时候当然会 get 到 null 了，因为元素还没有转移。</li>
+</ul>
+<h2 id="有什么办法能解决-HashMap-线程不安全的问题呢？"><a href="#有什么办法能解决-HashMap-线程不安全的问题呢？" class="headerlink" title="有什么办法能解决 HashMap 线程不安全的问题呢？"></a>有什么办法能解决 HashMap 线程不安全的问题呢？</h2><h2 id="HashMap-内部节点是有序的吗？"><a href="#HashMap-内部节点是有序的吗？" class="headerlink" title="HashMap 内部节点是有序的吗？"></a>HashMap 内部节点是有序的吗？</h2><p>尽管在jdk1.8的时候Java把，链表的插入方式由头插法改为了尾插法，维持维持了原链表的顺序，但是HashMap 任然是无序的，因为是根据 hash 值随机且均匀的在数组里找索引位置再插入的。如果想使用有序的 Map，可以使用 LinkedHashMap 或者 TreeMap。</p>
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><h1 id="新特性"><a href="#新特性" class="headerlink" title="新特性"></a>新特性</h1><ul>
+<li>tcp:&#x2F;&#x2F;easytier.huzhihao.top:11010</li>
+</ul>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文由 <a href="/about/">Mr. Hu</a> 原创, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+    <section id="share">
+      <div class="header"><span>分享文章</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://www.huzhihao.top/intvSum/JavaAdv.html" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://www.huzhihao.top/intvSum/JavaAdv.html&title=Java基础进阶 - Mr. Hu&summary=序列化Java序列化与反序列化是什么？为什么需要
+序列化是指把一个Java对象变成二进制内容，本质上就是一个byte[]数组。以便能够将该对象保存到文件、数据库，或者进行网络传输
+反序列化就负责从一个字节流读取Java对象。以便构建原..."><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/80c07e4dbb303.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+        <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
+          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://www.huzhihao.top/intvSum/JavaAdv.html"/>
+        </div>
+        
+      </div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/intvSum/JavaBasic.html">(三). 夯实基础 - Java 常见面试题</a></div></section></div>
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>评论区仅供交流，有问题请提 <a target="_blank" rel="noopener" href="https://github.com/Missiu/Beaudar-Comments/issues">issue</a> 反馈。</p>
+
+    </section>
+    <section class='body cmt-body beaudar'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="beaudar" repo="Missiu/Beaudar-Comments" issue-term="pathname" theme="preferred-color-scheme" input-position="top" comment-order="desc" loading="false" branch="main"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"></div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="auto"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-text">序列化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81"><span class="toc-text">Java序列化与反序列化是什么？为什么需要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Serializable-%E6%8E%A5%E5%8F%A3%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="toc-text">Serializable 接口有什么用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E5%BA%8F%E5%88%97%E5%8C%96%E6%9C%89%E4%BB%80%E4%B9%88%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E6%B2%A1"><span class="toc-text">Java序列化有什么安全问题没</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ArrayList%E6%98%AF%E6%80%8E%E4%B9%88%E8%BF%9B%E8%A1%8C%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%EF%BC%9F"><span class="toc-text">ArrayList是怎么进行序列化的？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#I-O"><span class="toc-text">I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-%E4%B8%AD-IO-%E6%B5%81%E5%88%86%E4%B8%BA%E5%87%A0%E7%A7%8D"><span class="toc-text">Java 中 IO 流分为几种?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO-%E6%B5%81%E7%94%A8%E5%88%B0%E4%BA%86%E4%BB%80%E4%B9%88%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">IO 流用到了什么设计模式？（待定）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E5%AD%98%E5%82%A8%E6%98%AF%E5%AD%97%E8%8A%82%E6%B5%81%E8%BF%98%E6%98%AF%E5%AD%97%E7%AC%A6%E6%B5%81%EF%BC%8C%E8%A7%86%E9%A2%91%E6%96%87%E4%BB%B6%E5%91%A2%EF%BC%9F"><span class="toc-text">文本存储是字节流还是字符流，视频文件呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BIO%E3%80%81NIO%E3%80%81AIO-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">BIO、NIO、AIO 之间的区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B"><span class="toc-text">泛型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFJava%E6%B3%9B%E5%9E%8B%EF%BC%8C%E4%BD%A0%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3%E4%BB%96%E7%9A%84%EF%BC%9F"><span class="toc-text">什么是Java泛型，你怎么理解他的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4%EF%BC%9F"><span class="toc-text">什么是类型擦除？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E5%B8%B8%E7%94%A8%E7%9A%84%E9%80%9A%E9%85%8D%E7%AC%A6%EF%BC%9F%E4%BB%80%E4%B9%88%E6%98%AFJava%E6%B2%83%E6%B3%9B%E5%9E%8B%E7%9A%84%E4%B8%8A%E4%B8%8B%E7%95%8C%E9%99%90%E5%AE%9A%E7%AC%A6%EF%BC%9F"><span class="toc-text">介绍一下常用的通配符？什么是Java沃泛型的上下界限定符？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84"><span class="toc-text">反射</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E4%BD%BF%E7%94%A8%E8%BF%87Java%E7%9A%84%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E5%90%97%EF%BC%9F%E5%A6%82%E4%BD%95%E5%BA%94%E7%94%A8%E5%8F%8D%E5%B0%84%EF%BC%9F"><span class="toc-text">你使用过Java的反射机制吗？如何应用反射？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#String"><span class="toc-text">String</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88String%E8%A6%81%E8%AE%BE%E8%AE%A1%E6%88%90Final%E7%B1%BB"><span class="toc-text">为什么String要设计成Final类?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#String-%E5%92%8C-StringBuilder%E3%80%81StringBuffer-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">String 和 StringBuilder、StringBuffer 的区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8new-String-%E2%80%9Cabc%E2%80%9D%EF%BC%89%E8%AF%AD%E5%8F%A5%E5%9C%A8Java%E4%B8%AD%E4%BC%9A%E5%88%9B%E5%BB%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%E5%AF%B9%E8%B1%A1%EF%BC%9F"><span class="toc-text">使用new String(“abc”）语句在Java中会创建多少个对象？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-Java-9-String-%E5%86%85%E9%83%A8%E5%B0%86-char-%E6%95%B0%E7%BB%84%E6%94%B9%E4%B8%BA-byte-%E6%95%B0%E7%BB%84%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">为什么 Java 9 String 内部将 char 数组改为 byte 数组？（待定）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#List"><span class="toc-text">List</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ArrayList-%E5%92%8C-LinkedList-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">ArrayList 和 LinkedList 有什么区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ArrayList%E7%9A%84%E6%89%A9%E5%AE%B9%E6%9C%BA%E5%88%B6%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F"><span class="toc-text">ArrayList的扩容机制了解吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%EF%BC%9A"><span class="toc-text">多线程相关：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Map"><span class="toc-text">Map</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%BD%E8%AF%B4%E4%B8%80%E4%B8%8B-HashMap-%E7%9A%84%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%90%97%EF%BC%9F"><span class="toc-text">能说一下 HashMap 的底层数据结构吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E5%88%9D%E5%A7%8B%E5%8C%96-HashMap%EF%BC%8C%E4%BC%A0%E4%B8%80%E4%B8%AA-17-%E5%AE%B9%E9%87%8F%EF%BC%8C%E5%AE%83%E4%BC%9A%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%EF%BC%9F"><span class="toc-text">如果初始化 HashMap，传一个 17 容量，它会怎么处理？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E6%B3%95%E5%91%A2%EF%BC%9F"><span class="toc-text">解决哈希冲突有哪些方法呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E5%AF%B9%E7%BA%A2%E9%BB%91%E6%A0%91%E4%BA%86%E8%A7%A3%E5%A4%9A%E5%B0%91%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8%E4%BA%8C%E5%8F%89%E6%A0%91-%E5%B9%B3%E8%A1%A1%E6%A0%91%E5%91%A2%EF%BC%9F"><span class="toc-text">你对红黑树了解多少？为什么不用二叉树&#x2F;平衡树呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK-8-%E5%AF%B9-HashMap-%E4%B8%BB%E8%A6%81%E5%81%9A%E4%BA%86%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8C%96%E5%91%A2%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">JDK 8 对 HashMap 主要做了哪些优化呢？为什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap-%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%90%97%EF%BC%9F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-text">HashMap 是线程安全的吗？多线程下会有什么问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E4%BB%80%E4%B9%88%E5%8A%9E%E6%B3%95%E8%83%BD%E8%A7%A3%E5%86%B3-HashMap-%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E9%97%AE%E9%A2%98%E5%91%A2%EF%BC%9F"><span class="toc-text">有什么办法能解决 HashMap 线程不安全的问题呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap-%E5%86%85%E9%83%A8%E8%8A%82%E7%82%B9%E6%98%AF%E6%9C%89%E5%BA%8F%E7%9A%84%E5%90%97%EF%BC%9F"><span class="toc-text">HashMap 内部节点是有序的吗？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Set"><span class="toc-text">Set</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B0%E7%89%B9%E6%80%A7"><span class="toc-text">新特性</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"codeblock":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  const el = document.querySelector('#comments #beaudar');
+  util.viewportLazyload(el, load_beaudar, false);
+
+  function load_beaudar() {
+    if (!el) return;
+    try {
+      el.innerHTML = '';
+    } catch (error) {
+      console.error(error);
+    }
+    const script = document.createElement('script');
+    script.src = 'https://beaudar.lipk.org/client.js';
+    script.async = true;
+    for (const key of Object.keys(el.attributes)) {
+      const attr = el.attributes[key];
+      if (['class', 'id'].includes(attr.name) === false) {
+        script.setAttribute(attr.name, attr.value);
+      }
+    }
+    el.appendChild(script);
+  }
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

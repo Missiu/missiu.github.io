@@ -1,0 +1,722 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>微服务 - Mr. Hu</title>
+
+  
+    <meta name="description" content="概述你认为什么是微服务？将一个大型的服务划分成小型、自治内恰、高内聚、低耦合的微小服务，每个服务可以独立开发、部署和拓展，既大大降低了协作开发难度，提高团队工作效率，又让应用程序更加灵活、可伸缩和可维护 微服务有哪些缺点？ 系统复杂性增加，不光是开发上，在部署上也会导致部署的版本不好控制，更难运维，在测试上也会因为测试场景复杂度的增加而让测试任务编排更加困难 服务间通信开销，传递数据需要额外的网络">
+<meta property="og:type" content="website">
+<meta property="og:title" content="微服务">
+<meta property="og:url" content="https://www.huzhihao.top/intvSum/SpringCloud.html">
+<meta property="og:site_name" content="Mr. Hu">
+<meta property="og:description" content="概述你认为什么是微服务？将一个大型的服务划分成小型、自治内恰、高内聚、低耦合的微小服务，每个服务可以独立开发、部署和拓展，既大大降低了协作开发难度，提高团队工作效率，又让应用程序更加灵活、可伸缩和可维护 微服务有哪些缺点？ 系统复杂性增加，不光是开发上，在部署上也会导致部署的版本不好控制，更难运维，在测试上也会因为测试场景复杂度的增加而让测试任务编排更加困难 服务间通信开销，传递数据需要额外的网络">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.huzhihao.top/intvSum/SpringCloud/IMG-F8BB987E6B9C67A8189DCA1C2230F0D8.png">
+<meta property="og:image" content="https://www.huzhihao.top/intvSum/SpringCloud/IMG-9A325348B7C4327740582BEA45C71A18.png">
+<meta property="og:image" content="https://www.huzhihao.top/intvSum/SpringCloud/IMG-3EB3067EACEC3E4525C5869FC9EFA1BC.png">
+<meta property="og:image" content="https://www.huzhihao.top/intvSum/SpringCloud/IMG-B3AB6D205BEC237A69D29B00A0A95028.png">
+<meta property="article:published_time" content="2024-08-28T06:27:02.000Z">
+<meta property="article:modified_time" content="2024-08-28T06:27:02.000Z">
+<meta property="article:author" content="Huzhihao">
+<meta property="article:tag" content="springcloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.huzhihao.top/intvSum/SpringCloud/IMG-F8BB987E6B9C67A8189DCA1C2230F0D8.png">
+  
+  
+  
+  <meta name="keywords" content="">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+    <link rel="shortcut icon" href="/images/favicon-28-dog.svg">
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="page" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/avatar.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Mr. Hu</div><div class="sub normal cap">我亦无他，唯手熟尔</div><div class="sub hover cap" style="opacity:0"> Life-long learning</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="专栏" href="/topic/"><span>专栏</span></a><a class="nav-item" title="文档" href="/wiki/"><span>文档</span></a><a class="nav-item" title="关于" href="/about/"><span>关于</span></a></nav>
+</div>
+<div class="widgets">
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">专栏：JavaSE</span></div><div class="widget-body"><a class="item" href="/JavaSE-Basics.html"><span class="title">(一). 基础入门 - Java基础</span></a><a class="item" href="/JavaSE-OOP.html"><span class="title">(二). 基础入门 - Java面向对象</span></a><a class="item" href="/JavaSE-Polymorphism.html"><span class="title">(三). 渐入佳境 - 重学多态</span></a><a class="item" href="/JavaSE-APIs.html"><span class="title">(四). 渐入佳境 - 常用API</span></a><a class="item" href="/JavaSE-Collections.html"><span class="title">(五). 渐入佳境 - 常用集合</span></a><a class="item" href="/JavaSE-Exception.html"><span class="title">(六). 登堂入室 - 异常处理</span></a><a class="item" href="/JavaSE-Thread.html"><span class="title">(七). 登堂入室- 多线程</span></a><a class="item" href="/JavaSE-IO.html"><span class="title">(八). 登堂入室 - I/O流</span></a><a class="item" href="/JavaSE-JDK8.html"><span class="title">(九). 登堂入室 - JDK8</span></a></div></widget>
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/Missiu" target="_blank" rel="external nofollow noopener noreferrer"><img no-lazy src="/images/github.svg" / onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="social" href="https://blog.csdn.net/qq_68001015?type=blog" target="_blank" rel="external nofollow noopener noreferrer"><img no-lazy src="/images/csdn.svg" / onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a></div></footer>
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/intvSum/SpringCloud.html">微服务</a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-08-28T06:27:02.000Z">2024-08-28</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-08-28T06:27:02.000Z">2024-08-28</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>微服务</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="你认为什么是微服务？"><a href="#你认为什么是微服务？" class="headerlink" title="你认为什么是微服务？"></a>你认为什么是微服务？</h2><p>将一个大型的服务划分成<strong>小型</strong>、<strong>自治内恰</strong>、<strong>高内聚</strong>、<strong>低耦合</strong>的微小服务，每个服务可以<strong>独立开发、部署和拓展</strong>，既大大降低了协作开发难度，提高团队工作效率，又让应用程序更加灵活、可伸缩和可维护</p>
+<h2 id="微服务有哪些缺点？"><a href="#微服务有哪些缺点？" class="headerlink" title="微服务有哪些缺点？"></a>微服务有哪些缺点？</h2><ol>
+<li>系统复杂性增加，不光是开发上，在部署上也会导致部署的版本不好控制，更难运维，在测试上也会因为测试场景复杂度的增加而让测试任务编排更加困难</li>
+<li>服务间通信开销，传递数据需要额外的网络开销和序列化开销，可能导致性能瓶颈和增加系统延迟</li>
+<li>数据一致性，每个微服务都有自己的数据存储，数据一致性和跨服务的事务管理变得更加复杂，需要额外解决分布式事务和数据同步的问题。</li>
+</ol>
+<h2 id="说下微服务有哪些组件"><a href="#说下微服务有哪些组件" class="headerlink" title="说下微服务有哪些组件"></a>说下微服务有哪些组件</h2><ol>
+<li>服务注册与发现：注册和发现服务实例、负载均衡等</li>
+<li>API网关：统一鉴权、日志记录、请求分发和过滤、灰度发布等</li>
+<li>负载均衡：分布流量、故障转移等</li>
+<li>容错与恢复：断路器、自动重试、限流、回退等</li>
+<li>服务通信：微服务之间需要通过某种通信协议进行交互，这种通信可以是同步的（例如 HTTP&#x2F;REST、gRPC）或异步的（例如消息队列、事件驱动）</li>
+<li>集中式日志管理：收集各节点日志并统一管理</li>
+<li>分布式链路追踪：直观的了解各节点间的调用链路</li>
+</ol>
+<h2 id="Spring、Spring-Boot和-SpringCloud-之间的关系是什么样子的"><a href="#Spring、Spring-Boot和-SpringCloud-之间的关系是什么样子的" class="headerlink" title="Spring、Spring Boot和 SpringCloud 之间的关系是什么样子的?"></a>Spring、Spring Boot和 SpringCloud 之间的关系是什么样子的?</h2><p>Spring一开始只有两个核心功能，分别是IOC 和 AOP，然后在这两个功能之上，不断发展了 Spring MVC、Spring Web等产品。<br>在此基础上，为了简化Spring应用的创建、运行、调试、部署等，Spring 官方在Spring的基础上推出了SpringBoot，SpringBoot出现的目的并不是取代Spring,而是简化Spring的开发，提高开发效率。<br>之后，随着SpringBoot开发单体越来越成熟，微服务的理念随之愈发流行，Spring Cloud 诞生了，他在SpringBoot开发的基础上，整合了微服务的理念，最终形成一套不错的微服务解决方案</p>
+<h1 id="服务注册与发现"><a href="#服务注册与发现" class="headerlink" title="服务注册与发现"></a>服务注册与发现</h1><h2 id="你认为注册中心是什么？有什么用"><a href="#你认为注册中心是什么？有什么用" class="headerlink" title="你认为注册中心是什么？有什么用"></a>你认为注册中心是什么？有什么用</h2><p>比如在一个分布式系统中，服务种类和数量都比较多，一种类型的服务可能部署有多个，这些服务需要进行相互调用，但是我们是没办法确定每个服务的状态，比如某些服务挂了，访问不了，再去访问就会出问题，那我们就需要一个工具也就是注册中心来描述服务的状态，管理这些服务。实际上就是一个<strong>服务治理</strong>问题</p>
+<p>注册中心在逻辑上可以分为注册中心的服务端、服务提供者、服务消费者。其中，服务提供者向注册中心服务端注册服务，然后服务消费者向服务端获取服务，获取到服务提供者的ip、端口等信息，服务调用者就可以发送http请求调用服务提供者提供的服务，在这个基础的流程中还需要做一些事情，比如说，服务提供者主动下线服务、服务提供者和注册中心服务段的续约，也可以叫健康检查。在分布式系统中多个注册中心服务端还涉及到nacos集群的同步的问题。</p>
+<h2 id="为什么springboot项目启动后自动注册nacos？"><a href="#为什么springboot项目启动后自动注册nacos？" class="headerlink" title="为什么springboot项目启动后自动注册nacos？"></a>为什么springboot项目启动后自动注册nacos？</h2><p>我们知道nacos服务如果要手动注册那么使用curl 命令也好、使用spring提供的RestTemplate也好，都是通过发送post请求进行注册，那么只需要在springboot启动的时候自动发送请求就行，在springboot中有一个设计模式——观察者模式，他是一种通知机制，又可以叫发布订阅模式。那么spingboot通过规定一系列事件，比如：ApplicationStartingEvent，这个事件可以在springboot开始运行的项目的时候，进行任何处理前触发。spingboot通过多波器发布事件，再对事件进行监听，最后触发ApplicationStartingEvent事件自动注册到nacos。需要注意的是，在springcloud中只定义注册规范，也就是他有个接口，用于让其他厂商实现其中定义的注册方法。所以说具体的注册逻辑是在springcloud alibaba 中的。</p>
+<h2 id="服务变更时怎么在注册中心保持更新？（待定）"><a href="#服务变更时怎么在注册中心保持更新？（待定）" class="headerlink" title="服务变更时怎么在注册中心保持更新？（待定）"></a>服务变更时怎么在注册中心保持更新？（待定）</h2><p>目前市面上有两大主要机制，一个是监听机制，一个是轮询机制。在nacos中本质上使用的轮询机制，</p>
+<p>所有有变更通知机制，在Apache的Zookeeper中使用的是监听机制，也就是它本质上是一个树形结构，可以在树上创建临时节点，并对节点添加监听器。临时节点的客户端与该节点建立长连接，并会实时关注节点的状态，同时，客户端存在一个回调函数，当节点状态发生变化时，就会通过监听器将这种变化传递到客户端并触发回调函数。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/intvSum/SpringCloud/IMG-F8BB987E6B9C67A8189DCA1C2230F0D8.png"></p>
+<h2 id="AP和CP是什么，怎么做取舍"><a href="#AP和CP是什么，怎么做取舍" class="headerlink" title="AP和CP是什么，怎么做取舍?"></a>AP和CP是什么，怎么做取舍?</h2><ul>
+<li><strong>一致性（Consistency）</strong> 同一时刻同一请求的不同实例返回的结果相同，这要求数据具有强一致性(Strong Consistency)，需要特别说明的这里的一致性与ACID（见上文）的一致性不是同一个概念，不要混淆</li>
+<li><strong>可用性（Availability）</strong> 所有读写请求在一定时间内得到正确的响应</li>
+<li><strong>分区容错性（Partition tolerance）</strong> 在网络异常情况下，系统仍能正常运作</li>
+</ul>
+<p>AP是在异常的情况下保证可用性，CP是保证强一致性。</p>
+<p>我们都知道nacos是既作为发现注册中心又作为配置中心的，从服务注册发现来看，服务之间需要感知对方当前提供的服务的示例信息，必须从服务发现注册中心获取，这就需要发现注册中心在任何时候都要尽可能对外提供服务。而且，nacos是采取了心跳可自动完成数据服务补偿的机制，可以快速恢复数据。很明显，在服务的发现注册来看，是需要保证高可用的（AP），所以使用最终一致性共识算法。当然，以上都是针对需要心跳机制的临时服务，对于持久化的服务，因为所有的数据都是直接使用调用Nacos服务端直接创建，因此更需要保障数据的一致性，采用强一致性共识是算法（CP）。</p>
+<p>如果我们从配置管理来看，配置数据也是由nacos创建并管理的，因此也必须保证大部分节点都保存了次配置数据才能看作配置成功，因此也是必须采用强一致性共享算法</p>
+<h2 id="为什么-Nacos-选择了-Raft-以及-Distro-一致性协议？"><a href="#为什么-Nacos-选择了-Raft-以及-Distro-一致性协议？" class="headerlink" title="为什么 Nacos 选择了 Raft 以及 Distro 一致性协议？"></a>为什么 Nacos 选择了 Raft 以及 Distro 一致性协议？</h2><p>首先raft是工业生产中用的最多的强一致性共享算法，不但跟容易理解，而且还有很多成熟的实现，比如nacos采用的就是蚂蚁金服开发的JRaft，而且JRaft支持多 RaftGroup ，也是让nacos实现<strong>数据分片</strong>成为可能。对于Distro，他是最终一致性共享算法，市面上也有很多，比如 <strong>Eureka</strong> 、<strong>Gossip</strong> ，Distro算是综合了他们两个，既解决了因为Gossip随机发送而导致的重复发送问题，又引入了<strong>权威Server</strong>的概念，有效降低消息冗余的问题。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/intvSum/SpringCloud/IMG-9A325348B7C4327740582BEA45C71A18.png"></p>
+<h2 id="Raft怎么实现强一致性共享的？"><a href="#Raft怎么实现强一致性共享的？" class="headerlink" title="Raft怎么实现强一致性共享的？"></a>Raft怎么实现强一致性共享的？</h2><p>raft是一种基于一种选举机制的分布式一致性算法，通过选举产生一个主节点，所有的写操作通过主节点来处理，再由主节点同步到其他从节点，在nacos里配置变更首先在主节点上进行然后通过raft协议进行同步的。</p>
+<h2 id="三种一致性协议：Distor、Eureka、Gossip有什么区别？（待定）"><a href="#三种一致性协议：Distor、Eureka、Gossip有什么区别？（待定）" class="headerlink" title="三种一致性协议：Distor、Eureka、Gossip有什么区别？（待定）"></a>三种一致性协议：Distor、Eureka、Gossip有什么区别？（待定）</h2><ul>
+<li>Distor：我认为其核心特点就是分布式，新加入的 Distro 节点会轮询所有的 Distro 节点，通过向其他的机器发送请求拉取全量数据，然后各个Distro 节点之间会保持心跳，发送元信息（网络传输数据量级更低）进行数据校验，如果数据不一致则会发起⼀次全量拉取请求，将数据补齐。</li>
+</ul>
+<h2 id="nacos具体怎么实现配置一致性的？"><a href="#nacos具体怎么实现配置一致性的？" class="headerlink" title="nacos具体怎么实现配置一致性的？"></a>nacos具体怎么实现配置一致性的？</h2><p>首先说这个没有用数据库的，也就是注册发现中心</p>
+<ol>
+<li>基于 Raft 的强一致性共享协议</li>
+<li>通过长轮询机制：在长轮询模式下，客户端定时向服务端发起请求，检查配置信息是否发生变更。如果没有变更，服务端会”hold”住这个请求，即暂时不返回结果，直到配置发生变化或达到一定的超时时间。</li>
+<li>心跳检测：客户端主动上报，告诉服务端自己健康状态，如果在⼀段时间没有上报，那么我们就 认为服务已经不健康。</li>
+</ol>
+<p>作为配置中心时，⼀致性的核心是 Server 与 DB 保持数据⼀致性，从而保证 Server 数据⼀致；Server 之间都是对 等的。数据写任何⼀个 Server，优先持久化，持久化成功后异步通知其他节点到数据库中拉取最新配置值，并且通知写入成功。</p>
+<h2 id="nacos的健康检查机制是怎样的？"><a href="#nacos的健康检查机制是怎样的？" class="headerlink" title="nacos的健康检查机制是怎样的？"></a>nacos的健康检查机制是怎样的？</h2><p>第⼀种方式是客户端主动上报，告诉服务端自己健康状态，如果在⼀段时间没有上报，那么我们就 认为服务已经不健康。第二种，则是服务端主动向客户端进行探测，检查客户端是否还被能探测到。</p>
+<p>其中心跳机制主要是用于临时实例，注册中心会在⼀段时间没有收到来自客户端的心跳后会将实例设置为不健康，然 后在⼀段时间后进行剔除。而永久实例在被删除之前会永久的存在于注册中心，且有可能并不知道注册中心存在，不会主动向注册中心上报心跳，那么这个时候就需要注册中心主动进行探活。</p>
+<p>临时实例也有两种注册方法，OpenAPI和SDK，其中OpenAPI是用户根据自身需求调用 Http 接口对服务进行注册，然后通过 Http 接 口发送心跳到注册中心。在注册服务的同时会注册⼀个全局的客户端心跳检测的任务。在服务⼀段 时间没有收到来自客户端的心跳后，该任务会将其标记为不健康，如果在间隔的时间内还未收到心 跳，那么该任务会将其剔除。Nacos 2.x 版本中，SDK 的注册方式实际是通过 RPC 与注册中心保持连接，客户端会定时的通过 RPC 连接向 Nacos 注册中心发送心跳，保持连接的存活。如果客户端和注册中心的连接断开，那么注册中心会主动剔除该 client 所注册的服务，达到下线的效果。同时 Nacos 注册中心还会在注册中心启动时，注册⼀个过期客户端清除的定时任务， 用于删除那些健康状态超过⼀段时间的客户端。</p>
+<p>对于永久实例的健康检查，实际也是使用 OpenAPI 的方式进行注册，这样可以保证，即使是客户端下线后也不会影响永久实例的健康检查。</p>
+<h1 id="API-网关"><a href="#API-网关" class="headerlink" title="API 网关"></a>API 网关</h1><h2 id="为什么要网关，网关有什么用？"><a href="#为什么要网关，网关有什么用？" class="headerlink" title="为什么要网关，网关有什么用？"></a>为什么要网关，网关有什么用？</h2><p>每个服务有自己的地址，我们不可能让客户端直接和各个微服务进行通信，因此我们需要一个统一的入口用来负责服务请求路由、组合及协议转换，客户端的所有请求都需要经过 API 网关，然后由它将请求路由到合适的微服务。并且 API 网管还可以调用多个微服务合并结果来处理一个请求。它可以在 Web 协议（如 HTTP 与 WebSocket）与内部使用的非 Web 友好协议（RPC 等）之间转换。</p>
+<p>此外网关还可以实现一些非功能需求，比如说日志监控，记录请求ip地址、对恶意请求进行监控报警等，还可以进行安全管理，进行统一的身份验证、授权等，还可以进行统一的限流、熔断、降级、等容错策略，当然还可以负载均衡等。</p>
+<h2 id="说说gateway网关的架构-核心-原理"><a href="#说说gateway网关的架构-核心-原理" class="headerlink" title="说说gateway网关的架构&#x2F;核心&#x2F;原理"></a>说说gateway网关的架构&#x2F;核心&#x2F;原理</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/intvSum/SpringCloud/IMG-3EB3067EACEC3E4525C5869FC9EFA1BC.png"></p>
+<p>gateway由若干的route组成，路由是gateway的核心，每一个route表示一个完整的网关节点，他包含路由规则和校验（断言）、过滤处理和容错处理（过滤器），一个route由若干谓词和若干过滤器再加上名字和映射地址组成</p>
+<p>断言&#x2F;谓词（predicate）就是路由规则和简单的校验，主用于请求条件的匹配，比如说通过指定请求方法、请求路径、请求头来进行匹配</p>
+<p>而过滤器其实就是在代理服务之前或者之后做一些事情，对请求进行处理以及转换，比如http和rpc进行转换，还可以鉴权、负载均衡、服务保护等，这些都是可以通过自定义过滤器实现的。</p>
+<p>外部请求进网关之后，到达由名字和地址、谓词映射规则组成的集合地址中（Geteway Handler Mapping），再到由若干过滤器组成的处理器中进行代理（Geteway Web Handler），类似一个栈，最后到达各个微服务</p>
+<h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><h2 id="什么是负载均衡？为什么要负载均衡"><a href="#什么是负载均衡？为什么要负载均衡" class="headerlink" title="什么是负载均衡？为什么要负载均衡"></a>什么是负载均衡？为什么要负载均衡</h2><p>在分布式系统中，服务通常采用多节点的方式进行部署，如果某个节点请求过多，或者说该节点的服务器性能不是更好，从而影响到服务的性能和响应速度，那么负载均衡就是发请求平均分发或者通过一定的策略分（加权平均、随机、hash）发到多个节点上，让各个几点保持较高的响应速度。</p>
+<p>载均衡能够合理分配客户端请求或网络流量到多个服务器，避免单个服务器因负载过重而成为瓶<br>颈，从而提升整体系统性能</p>
+<h2 id="怎么实现负载均衡？有什么策略（待定）"><a href="#怎么实现负载均衡？有什么策略（待定）" class="headerlink" title="怎么实现负载均衡？有什么策略（待定）"></a>怎么实现负载均衡？有什么策略（待定）</h2><p>我们先说有什么策略</p>
+<ul>
+<li>轮询：循环的顺序将请求分配给每个服务器，适用于各服务器性能相近的情况。过对自增轮询下表对<strong>服务器总数取模</strong>来实现轮询。</li>
+<li>随机：随机选择一个服务器来处理请求，适用于服务器性能相近且负载均匀的情况。通过指定提供者服务数量范围，使用<strong>Random取随机数</strong>。</li>
+<li>最小连接数：择当前连接数最少的服务器来处理请求，适用于长连接场景。</li>
+<li>加权轮询：服务器的性能或权重分配请求，性能更好的服务器会获得更多的请求，适用于服务器性能不均的情况。</li>
+<li>加权随机：服务器的权重随机选择一个服务器处理请求，适用于服务器性能不均的情况。</li>
+<li>加权最少连接：在最少连接法的基础上增加服务器的权重分配</li>
+<li>源地址散列法（IP Hash）：据客户端IP地址的哈希值选择服务器处理请求，确保同一客户端的请求始终被分配到同一台服务器上，适用于需要保持会话一致性的场景。</li>
+<li>一致性哈希法（ConsistentHashing）：将请求分配给最靠近哈希值的服务器，适用于动态变化的集群环境。</li>
+</ul>
+<p>首先负载均衡是多层的，举个简单的例子，用户发送了一个请求，通过外网访问cdn缓存的静态文件，然后访问到域名，这个域名对应到nginx监听的端口，把请求转到内网的服务，一般就是网关对应的端口了，在nginx处我们可以搞集群，网关也可以搞集群，这里就可以做负载均衡，然后</p>
+<p><a target="_blank" rel="noopener" href="https://icyfenix.cn/architect-perspective/general-architecture/diversion-system/load-balancing.html">https://icyfenix.cn/architect-perspective/general-architecture/diversion-system/load-balancing.html</a></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/intvSum/SpringCloud/IMG-B3AB6D205BEC237A69D29B00A0A95028.png"></p>
+<p>在项目中又可以分为在服务端和在客户端的负载均衡，其中在服务端我通常使用nginx进行负载均衡（在conf文件中的http段定义服务器列表即可，要实现算法也简单，直接在定义的服务器段上写算法名称就行），在客户端</p>
+<p>我们在项目中通过定义通用的负载均衡接口、使用工厂模式（根据用户动态配置负载均衡实例）、使用SPI机制（允许用户拓展自己的负载均衡器）实现了可扩展的负载均衡器</p>
+<h2 id="什么是-LVS-Nginx和LVS有什么区别？（待定）"><a href="#什么是-LVS-Nginx和LVS有什么区别？（待定）" class="headerlink" title="什么是 LVS?Nginx和LVS有什么区别？（待定）"></a>什么是 LVS?Nginx和LVS有什么区别？（待定）</h2><p><a target="_blank" rel="noopener" href="https://www.mianshiya.com/question/1824355723241373697">https://www.mianshiya.com/question/1824355723241373697</a></p>
+<h2 id="Ribbon-和-Nginx的区别是什么？"><a href="#Ribbon-和-Nginx的区别是什么？" class="headerlink" title="Ribbon 和 Nginx的区别是什么？"></a>Ribbon 和 Nginx的区别是什么？</h2><ul>
+<li>Nginx是服务端负载均衡，能独立部署。客户端所有的请求都传到Nginx，然后由Nginx实现转发请求，即服务均衡都是由服务端实现的，实现了反向代理。</li>
+<li>Ribbon是本地负载均衡，属于客户端负载均衡，是一个类库。在调用微服务接口的时候，会先到注册中心获取注册信息服务列表，然后缓存到JVM本地，在本地决定选择哪个服务实例进行RPC远程调用，实现了客户端自定义选择，所以是客户端负载均衡</li>
+</ul>
+<h1 id="容错与恢复"><a href="#容错与恢复" class="headerlink" title="容错与恢复"></a>容错与恢复</h1><h2 id="什么是断路器（服务熔断）？为什么需要断路器？"><a href="#什么是断路器（服务熔断）？为什么需要断路器？" class="headerlink" title="什么是断路器（服务熔断）？为什么需要断路器？"></a>什么是断路器（服务熔断）？为什么需要断路器？</h2><p>在微服务架构中，一个系统可能由多个服务构成，这些服务之间相互进行远程调用，比如A调用B，B调用C，C调用其他微服务等等，这个时候如果调用链路上的某个服务岩机了，或者响应时间过长比如微服务C岩机了，这个时候服务A和B之间由于调用关系，可能也会出现服务不可用的情况，然后随着调用请求的增多，对系统资源的占用页越来越多，最后导致微服务系统整体崩溃，从而导系统的全面崩盘，这种现象就是我们所说的”<strong>服务雪崩</strong>”</p>
+<p>%% 在微服务架构中，服务之间的调用关系会形成调用链路，链路中的任何一个服务都可能出现超时或者岩机的情况，而在微服务系统中，如果调用失败的话可能会引起大面积的服务瘫痪，即形成“<strong>服务雪崩</strong>”的情况，这样的话对于服务的影响是巨大的。 %%</p>
+<ul>
+<li>正常情况下，断路器处于关闭状态，服务消费者正常请求微服务中的服务提供者。</li>
+<li>当发生了服务调用请求失败的时候，并且达到了一定比例，比如70%的请求发生了失败，或者失败的请求次数达到了100等等，这个时候断路器打开，此时将服务调用者不再发起服务调用请求，这种方法是一种<strong>快速失败</strong>的方法，也称为断路方法。</li>
+<li>断路器启用一段时间时候，自动进入“<strong>半关闭状态</strong>”，这个时候断路器允许服务调用者发起一个请求给服务提供者，如果请求调用成功了，关闭断路器，反之继续打开断路器，循环往复。</li>
+</ul>
+<p>一句话：为了避免大面积超时问题，让有问题的服务快速断路，启动一段时间后进入半关闭状态，用于判断服务是否健康，健康就关闭断路器，不健康就继续打开</p>
+<h2 id="你是做限流熔断降级限流的？（待定）"><a href="#你是做限流熔断降级限流的？（待定）" class="headerlink" title="你是做限流熔断降级限流的？（待定）"></a>你是做限流熔断降级限流的？（待定）</h2><p>目前市面上有很多相关的解决方案，比如</p>
+<ul>
+<li>Hystrix</li>
+<li>Resilience4j</li>
+<li>Dubbo</li>
+<li>Sentinel</li>
+</ul>
+<p>但是我使用最多的是Sentinel，他不但有图形化界面 ，而且因为是阿里开发的，和nacos、seata可以形成一套完善的微服务解决方案，Sentinel可以通过代理模式进行数据采集，再进行清洗和整合</p>
+<p>当然Dubbo作为一个RPC框架，也内置了负载均衡熔断降级等，也可以作为我目前学习的微服务解决方案的一部分，也有一些了解</p>
+<h1 id="远程调用"><a href="#远程调用" class="headerlink" title="远程调用"></a>远程调用</h1><h2 id="HTTP与RPC之间的区别？"><a href="#HTTP与RPC之间的区别？" class="headerlink" title="HTTP与RPC之间的区别？"></a>HTTP与RPC之间的区别？</h2><p>其中http是基于tcp的可以使用tls&#x2F;ssl进行安全加密，通信方式为客户端发送请求，服务端响应，并且主要使用RESTFul风格，而RPC可以用更多种传输协议，通过IDL进行接口定义。</p>
+<p>严格上讲，Http和RPC不是一个层面的东西：</p>
+<ul>
+<li>Http是一种应用层的协议，主要强调的是网络通信；</li>
+<li>RPC，其是一种分布式系统之间通信的方式，强调的是服务之间的远程调用。</li>
+</ul>
+<h2 id="Ribbon和Feign调用服务的区别是什么？（待定）"><a href="#Ribbon和Feign调用服务的区别是什么？（待定）" class="headerlink" title="Ribbon和Feign调用服务的区别是什么？（待定）"></a>Ribbon和Feign调用服务的区别是什么？（待定）</h2><p>首先要知道，feign内置ribbon，ribbon是基于http、tcp等协议的负载均衡组件，并且需要手动在代码中设置调用目标服务</p>
+<h2 id="Feign和Dubbo的区别-（待定）"><a href="#Feign和Dubbo的区别-（待定）" class="headerlink" title="Feign和Dubbo的区别?（待定）"></a>Feign和Dubbo的区别?（待定）</h2><h2 id="为什么FFeign第一次调用耗时很长？（待定）"><a href="#为什么FFeign第一次调用耗时很长？（待定）" class="headerlink" title="为什么FFeign第一次调用耗时很长？（待定）"></a>为什么FFeign第一次调用耗时很长？（待定）</h2><h1 id="日志处理"><a href="#日志处理" class="headerlink" title="日志处理"></a>日志处理</h1><h2 id="你们的服务是怎么做日志收集的？"><a href="#你们的服务是怎么做日志收集的？" class="headerlink" title="你们的服务是怎么做日志收集的？"></a>你们的服务是怎么做日志收集的？</h2><p>我们采用的ELK那套，也就是ElasticSearch主要负责数据的存储和检索，Logstash主<br>要负责从微服务集群采集日志，然后将日志数据发送到ES，最后Kibana就负责日志数据的可视化分析</p>
+<p>具体来说，我们先配置（Logstash）日志收集器，通过配置插件从文件输入收集、网络输入收集等，监听服务的日志输出，并对日志信息进行过滤和处理，之后把数据发送到ES，配置logstash的输出插件，把输出的日志进行存储和索引，最后把Kibana链接到ES，创建仪表盘、图表以及搜索查询，从而实时监控和分析微服务的日志数据</p>
+<h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><h2 id="什么情况下需要使用分布式事务，有哪些方案？"><a href="#什么情况下需要使用分布式事务，有哪些方案？" class="headerlink" title="什么情况下需要使用分布式事务，有哪些方案？"></a>什么情况下需要使用分布式事务，有哪些方案？</h2><p>分布式事务是由多个本地事务组成的，一般存在跨多个数据库、或者不同服务的情况下要用到分布式事务</p>
+<p><a target="_blank" rel="noopener" href="https://www.mianshiya.com/bank/1797453053310402561/question/1797616463733981185">https://www.mianshiya.com/bank/1797453053310402561/question/1797616463733981185</a></p>
+</article>
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body beaudar'>
+      
+
+<svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="beaudar" repo="Missiu/Beaudar-Comments" issue-term="pathname" theme="preferred-color-scheme" input-position="top" comment-order="desc" loading="false" branch="main"></div>
+
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"></div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="auto"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E8%AE%A4%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%EF%BC%9F"><span class="toc-text">你认为什么是微服务？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9C%89%E5%93%AA%E4%BA%9B%E7%BC%BA%E7%82%B9%EF%BC%9F"><span class="toc-text">微服务有哪些缺点？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E4%B8%8B%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9C%89%E5%93%AA%E4%BA%9B%E7%BB%84%E4%BB%B6"><span class="toc-text">说下微服务有哪些组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring%E3%80%81Spring-Boot%E5%92%8C-SpringCloud-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E5%AD%90%E7%9A%84"><span class="toc-text">Spring、Spring Boot和 SpringCloud 之间的关系是什么样子的?</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%8F%91%E7%8E%B0"><span class="toc-text">服务注册与发现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-text">你认为注册中心是什么？有什么用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88springboot%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8%E5%90%8E%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%86%8Cnacos%EF%BC%9F"><span class="toc-text">为什么springboot项目启动后自动注册nacos？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%98%E6%9B%B4%E6%97%B6%E6%80%8E%E4%B9%88%E5%9C%A8%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%BF%9D%E6%8C%81%E6%9B%B4%E6%96%B0%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">服务变更时怎么在注册中心保持更新？（待定）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AP%E5%92%8CCP%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E6%80%8E%E4%B9%88%E5%81%9A%E5%8F%96%E8%88%8D"><span class="toc-text">AP和CP是什么，怎么做取舍?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-Nacos-%E9%80%89%E6%8B%A9%E4%BA%86-Raft-%E4%BB%A5%E5%8F%8A-Distro-%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%EF%BC%9F"><span class="toc-text">为什么 Nacos 选择了 Raft 以及 Distro 一致性协议？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Raft%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E5%BC%BA%E4%B8%80%E8%87%B4%E6%80%A7%E5%85%B1%E4%BA%AB%E7%9A%84%EF%BC%9F"><span class="toc-text">Raft怎么实现强一致性共享的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%EF%BC%9ADistor%E3%80%81Eureka%E3%80%81Gossip%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">三种一致性协议：Distor、Eureka、Gossip有什么区别？（待定）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nacos%E5%85%B7%E4%BD%93%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E9%85%8D%E7%BD%AE%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%EF%BC%9F"><span class="toc-text">nacos具体怎么实现配置一致性的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nacos%E7%9A%84%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%9C%BA%E5%88%B6%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="toc-text">nacos的健康检查机制是怎样的？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#API-%E7%BD%91%E5%85%B3"><span class="toc-text">API 网关</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%BD%91%E5%85%B3%EF%BC%8C%E7%BD%91%E5%85%B3%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="toc-text">为什么要网关，网关有什么用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E8%AF%B4gateway%E7%BD%91%E5%85%B3%E7%9A%84%E6%9E%B6%E6%9E%84-%E6%A0%B8%E5%BF%83-%E5%8E%9F%E7%90%86"><span class="toc-text">说说gateway网关的架构&#x2F;核心&#x2F;原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">什么是负载均衡？为什么要负载均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E7%AD%96%E7%95%A5%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">怎么实现负载均衡？有什么策略（待定）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-LVS-Nginx%E5%92%8CLVS%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">什么是 LVS?Nginx和LVS有什么区别？（待定）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ribbon-%E5%92%8C-Nginx%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">Ribbon 和 Nginx的区别是什么？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%B9%E9%94%99%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">容错与恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%96%AD%E8%B7%AF%E5%99%A8%EF%BC%88%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD%EF%BC%89%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%96%AD%E8%B7%AF%E5%99%A8%EF%BC%9F"><span class="toc-text">什么是断路器（服务熔断）？为什么需要断路器？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E6%98%AF%E5%81%9A%E9%99%90%E6%B5%81%E7%86%94%E6%96%AD%E9%99%8D%E7%BA%A7%E9%99%90%E6%B5%81%E7%9A%84%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">你是做限流熔断降级限流的？（待定）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="toc-text">远程调用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E4%B8%8ERPC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">HTTP与RPC之间的区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ribbon%E5%92%8CFeign%E8%B0%83%E7%94%A8%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">Ribbon和Feign调用服务的区别是什么？（待定）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign%E5%92%8CDubbo%E7%9A%84%E5%8C%BA%E5%88%AB-%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">Feign和Dubbo的区别?（待定）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88FFeign%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%B0%83%E7%94%A8%E8%80%97%E6%97%B6%E5%BE%88%E9%95%BF%EF%BC%9F%EF%BC%88%E5%BE%85%E5%AE%9A%EF%BC%89"><span class="toc-text">为什么FFeign第一次调用耗时很长？（待定）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86"><span class="toc-text">日志处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%A0%E4%BB%AC%E7%9A%84%E6%9C%8D%E5%8A%A1%E6%98%AF%E6%80%8E%E4%B9%88%E5%81%9A%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E7%9A%84%EF%BC%9F"><span class="toc-text">你们的服务是怎么做日志收集的？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%EF%BC%8C%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E6%A1%88%EF%BC%9F"><span class="toc-text">什么情况下需要使用分布式事务，有哪些方案？</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"codeblock":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  const el = document.querySelector('#comments #beaudar');
+  util.viewportLazyload(el, load_beaudar, false);
+
+  function load_beaudar() {
+    if (!el) return;
+    try {
+      el.innerHTML = '';
+    } catch (error) {
+      console.error(error);
+    }
+    const script = document.createElement('script');
+    script.src = 'https://beaudar.lipk.org/client.js';
+    script.async = true;
+    for (const key of Object.keys(el.attributes)) {
+      const attr = el.attributes[key];
+      if (['class', 'id'].includes(attr.name) === false) {
+        script.setAttribute(attr.name, attr.value);
+      }
+    }
+    el.appendChild(script);
+  }
+</script>
+
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
