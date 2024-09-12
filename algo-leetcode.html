@@ -196,8 +196,12 @@
 <h3 id="面试题-02-07-链表相交"><a href="#面试题-02-07-链表相交" class="headerlink" title="面试题 02.07. 链表相交"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/">面试题 02.07. 链表相交</a></h3><p>给你两个单链表的头节点 <code>headA</code> 和 <code>headB</code> ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 <code>null</code> 。</p>
 <p>思路</p>
 <ul>
-<li>创建两个节点，作为headA和headB</li>
-<li>遍历两个链表</li>
+<li>创建两个节点，作为headA（别名 a）和headB（别名b）</li>
+<li>a和b的相同部分c，a到c经过n个节点，b到c经过m个节点</li>
+<li>第一次走：a长度：n+c，b长度：m+c</li>
+<li>第二次换路径走：a长度：m+c，b长度：n+c</li>
+<li>这样他们无论怎么怎么走都是a：n-&gt;c-&gt;m-&gt;c，b：m-&gt;c-&gt;n-&gt;c</li>
+<li>终点都是c，如果有交点无论如何都是会在c相遇，如果没有交点，就是n-&gt;m和m-&gt;n也就不会相遇。</li>
 </ul>
 <h2 id="栈与队列"><a href="#栈与队列" class="headerlink" title="栈与队列"></a>栈与队列</h2><h3 id="20-有效的括号"><a href="#20-有效的括号" class="headerlink" title="20. 有效的括号"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-parentheses/">20. 有效的括号</a></h3><p>给定一个只包括 <code>&#39;(&#39;</code>，<code>&#39;)&#39;</code>，<code>&#39;&#123;&#39;</code>，<code>&#39;&#125;&#39;</code>，<code>&#39;[&#39;</code>，<code>&#39;]&#39;</code> 的字符串 <code>s</code> ，判断字符串是否有效。</p>
 <p>有效字符串需满足：</p>

@@ -187,15 +187,13 @@
 
 <h2 id="获取kit-token"><a href="#获取kit-token" class="headerlink" title="获取kit_token"></a>获取kit_token</h2><ul>
 <li>请求类型：GET</li>
-<li>请求地址：&#x2F;cloudGreenhouses&#x2F;getKitToke?deviceCode&#x3D;9L0D98FPHA16795&amp;channelId&#x3D;0&amp;kitType&#x3D;0</li>
+<li>请求地址：&#x2F;cloudGreenhouses&#x2F;getKitToke?deviceCode&#x3D;9L0D98FPHA16795&amp;channelId&#x3D;0</li>
 <li>请求参数：<ul>
 <li>String deviceCode：在查询出的监控视频列表里有</li>
-<li>String channelId：&#x2F;&#x2F; todo 暂未发现</li>
-<li>String kitType：&#x2F;&#x2F; todo 暂未发现</li>
+<li>String channelId：在查询出的监控视频列表里有 channel<br>响应：</li>
 </ul>
 </li>
 </ul>
-<p>响应：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;kit_token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Kt_hzb416177422044de980f9f8357b619f&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;At_0000hz288c970032294eb6b0f979e53e&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SuccessCode&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="获取监控视频流地址"><a href="#获取监控视频流地址" class="headerlink" title="获取监控视频流地址"></a>获取监控视频流地址</h2><p>这个请求可以不带请求头！带了也没关系</p>
@@ -207,11 +205,10 @@
 <li>ParamsDTO params<ul>
 <li>String kitToken；在kit_token里</li>
 <li>String deviceId;  在查询出的监控视频列表里有</li>
-<li>String channelId;  &#x2F;&#x2F; todo 暂未发现，但是应该和kit_token的channelId对应</li>
+<li>String channelId;  和kit_token的channelId对应</li>
 <li>String beginTime;</li>
 <li>String endTime;</li>
 <li>String businessType;  &#x2F;&#x2F; todo 暂未发现</li>
-<li>String streamId;  &#x2F;&#x2F; todo 暂未发现</li>
 </ul>
 </li>
 </ul>
